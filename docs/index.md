@@ -6,7 +6,7 @@ description: "Kreuzberg – Extract text, tables, and metadata from 75+ file for
 ![Kreuzberg](assets/Docs-banner.png)
 </div>
 
-# Kreuzberg Documentation
+# Kreuzberg
 
 Kreuzberg is a document intelligence platform with a high‑performance Rust core and native bindings for Python, TypeScript/Node.js, C#, Ruby, Go, Elixir, and Rust itself. You can use it as an SDK, CLI, Docker image, REST API server, or MCP tool to extract text, tables, and metadata from 75+ file formats (PDF, Office, images, HTML, XML, archives, email, and more) with optional OCR and post-processing pipelines.
 
