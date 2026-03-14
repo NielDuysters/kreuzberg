@@ -25,47 +25,19 @@ use super::text_repair::{
 };
 use super::types::{LayoutHint, PdfParagraph};
 
-/// Render a PDF document as markdown, with tables interleaved at their positions.
+/// Stage 0: Try structure tree extraction for each page.
 ///
-/// Returns (markdown, has_font_encoding_issues).
-#[allow(clippy::too_many_arguments)]
-pub fn render_document_as_markdown_with_tables(
-    document: &PdfDocument,
-    k_clusters: usize,
-    tables: &[crate::types::Table],
-    top_margin: Option<f32>,
-    bottom_margin: Option<f32>,
-    page_marker_format: Option<&str>,
-    layout_hints: Option<&[Vec<LayoutHint>]>,
-    #[cfg(feature = "layout-detection")] layout_images: Option<&[image::DynamicImage]>,
-    #[cfg(not(feature = "layout-detection"))] _layout_images: Option<()>,
-    #[cfg(feature = "layout-detection")] layout_results: Option<&[crate::pdf::layout_runner::PageLayoutResult]>,
-    #[cfg(not(feature = "layout-detection"))] _layout_results: Option<()>,
-) -> Result<(String, bool)> {
-    let pages = document.pages();
-    let page_count = pages.len();
-    tracing::debug!(page_count, "PDF markdown pipeline: starting render");
-
-    let mut has_font_encoding_issues = false;
-
-    // Previously this forced heuristic extraction when layout hints were present,
-    // but apply_layout_overrides() now supports proportional matching for structure
-    // tree pages without positional data. Forcing heuristic extraction degrades text
-    // quality (chars_to_segments garbles words), so we let structure tree extraction
-    // proceed normally and apply layout hints in Stage 3.
-    let force_heuristic = false;
-
-    // Stage 0: Try structure tree extraction for each page.
+/// Returns (struct_tree_results, heuristic_pages, has_font_encoding_issues).
+#[allow(clippy::type_complexity)]
+fn extract_structure_tree_pages(
+    pages: &PdfPages,
+    page_count: PdfPageIndex,
+) -> Result<(Vec<Option<Vec<PdfParagraph>>>, Vec<usize>, bool)> {
     let mut struct_tree_results: Vec<Option<Vec<PdfParagraph>>> = Vec::with_capacity(page_count as usize);
     let mut heuristic_pages: Vec<usize> = Vec::new();
+    let mut has_font_encoding_issues = false;
 
     for i in 0..page_count {
-        if force_heuristic {
-            struct_tree_results.push(None);
-            heuristic_pages.push(i as usize);
-            continue;
-        }
-
         let page = pages.get(i).map_err(|e| {
             crate::pdf::error::PdfError::TextExtractionFailed(format!("Failed to get page {}: {:?}", i, e))
         })?;
@@ -187,18 +159,32 @@ pub fn render_document_as_markdown_with_tables(
         "PDF markdown pipeline: stage 0 complete"
     );
 
-    // Stage 1: Extract segments from pages that need heuristic extraction.
-    // Uses pdfium's page objects API (via PdfParagraph::from_objects) for spatial analysis
-    // and text grouping, plus image detection for position-aware placeholders.
+    Ok((struct_tree_results, heuristic_pages, has_font_encoding_issues))
+}
+
+/// Stage 1: Extract segments from heuristic pages via pdfium text/object APIs.
+///
+/// Returns (all_page_segments indexed by page, image_positions).
+fn extract_heuristic_segments(
+    pages: &PdfPages,
+    page_count: PdfPageIndex,
+    heuristic_pages: &[usize],
+    top_margin: Option<f32>,
+    bottom_margin: Option<f32>,
+) -> (Vec<Vec<SegmentData>>, Vec<ImagePosition>) {
     let stage1_start = std::time::Instant::now();
     let mut all_page_segments: Vec<Vec<SegmentData>> = vec![Vec::new(); page_count as usize];
     let mut all_image_positions: Vec<ImagePosition> = Vec::new();
     let mut image_offset = 0usize;
 
-    for &i in &heuristic_pages {
-        let page = pages.get(i as PdfPageIndex).map_err(|e| {
-            crate::pdf::error::PdfError::TextExtractionFailed(format!("Failed to get page {}: {:?}", i, e))
-        })?;
+    for &i in heuristic_pages {
+        let page = match pages.get(i as PdfPageIndex) {
+            Ok(p) => p,
+            Err(e) => {
+                tracing::warn!("Failed to get page {} for heuristic extraction: {:?}", i, e);
+                continue;
+            }
+        };
 
         let page_t = std::time::Instant::now();
         let (segments, image_positions) = objects_to_page_data(&page, i + 1, &mut image_offset);
@@ -210,10 +196,6 @@ pub fn render_document_as_markdown_with_tables(
                 page_ms,
                 segments.len()
             );
-        }
-
-        if build_ligature_repair_map(&page).is_some() {
-            has_font_encoding_issues = true;
         }
 
         // Filter out segments in page margins (headers/footers/page numbers)
@@ -281,6 +263,19 @@ pub fn render_document_as_markdown_with_tables(
         "PDF markdown pipeline: stage 1 complete"
     );
 
+    (all_page_segments, all_image_positions)
+}
+
+/// Stage 2: Cluster font sizes globally and assign heading levels.
+///
+/// Returns (heading_map, set of struct-tree page indices needing font-size classification).
+#[allow(clippy::type_complexity)]
+fn build_heading_map(
+    all_page_segments: &[Vec<SegmentData>],
+    struct_tree_results: &[Option<Vec<PdfParagraph>>],
+    heuristic_pages: &[usize],
+    k_clusters: usize,
+) -> Result<(Vec<(f32, Option<u8>)>, std::collections::HashSet<usize>)> {
     // Identify structure tree pages that have font size variation but no
     // heading signals — these need font-size-based heading classification.
     // Pages with no font variation are left as plain paragraphs (classify
@@ -300,7 +295,7 @@ pub fn render_document_as_markdown_with_tables(
         })
         .collect();
 
-    // Stage 2: Global font-size clustering (heuristic pages + struct tree pages needing classification).
+    // Build TextBlocks from heuristic pages + struct tree pages needing classification.
     let mut all_blocks: Vec<TextBlock> = Vec::new();
     let empty_bbox = BoundingBox {
         left: 0.0,
@@ -308,7 +303,7 @@ pub fn render_document_as_markdown_with_tables(
         right: 0.0,
         bottom: 0.0,
     };
-    for &i in &heuristic_pages {
+    for &i in heuristic_pages {
         for seg in &all_page_segments[i] {
             if seg.text.trim().is_empty() {
                 continue;
@@ -339,6 +334,64 @@ pub fn render_document_as_markdown_with_tables(
         let clusters = cluster_font_sizes(&all_blocks, k_clusters)?;
         assign_heading_levels_smart(&clusters, MIN_HEADING_FONT_RATIO, MIN_HEADING_FONT_GAP)
     };
+
+    Ok((heading_map, struct_tree_needs_classify))
+}
+
+/// Render a PDF document as markdown, with tables interleaved at their positions.
+///
+/// Returns (markdown, has_font_encoding_issues).
+#[allow(clippy::too_many_arguments)]
+pub fn render_document_as_markdown_with_tables(
+    document: &PdfDocument,
+    k_clusters: usize,
+    tables: &[crate::types::Table],
+    top_margin: Option<f32>,
+    bottom_margin: Option<f32>,
+    page_marker_format: Option<&str>,
+    layout_hints: Option<&[Vec<LayoutHint>]>,
+    #[cfg(feature = "layout-detection")] layout_images: Option<&[image::DynamicImage]>,
+    #[cfg(not(feature = "layout-detection"))] _layout_images: Option<()>,
+    #[cfg(feature = "layout-detection")] layout_results: Option<&[crate::pdf::layout_runner::PageLayoutResult]>,
+    #[cfg(not(feature = "layout-detection"))] _layout_results: Option<()>,
+) -> Result<(String, bool)> {
+    let pages = document.pages();
+    let page_count = pages.len();
+    tracing::debug!(page_count, "PDF markdown pipeline: starting render");
+
+    let mut has_font_encoding_issues = false;
+
+    // Previously this forced heuristic extraction when layout hints were present,
+    // but apply_layout_overrides() now supports proportional matching for structure
+    // tree pages without positional data. Forcing heuristic extraction degrades text
+    // quality (chars_to_segments garbles words), so we let structure tree extraction
+    // proceed normally and apply layout hints in Stage 3.
+
+    // Stage 0: Try structure tree extraction for each page.
+    let (mut struct_tree_results, heuristic_pages, struct_tree_font_issues) =
+        extract_structure_tree_pages(pages, page_count)?;
+    has_font_encoding_issues |= struct_tree_font_issues;
+
+    // Stage 1: Extract segments from pages that need heuristic extraction.
+    // Uses pdfium's page objects API (via PdfParagraph::from_objects) for spatial analysis
+    // and text grouping, plus image detection for position-aware placeholders.
+    let (mut all_page_segments, all_image_positions) =
+        extract_heuristic_segments(pages, page_count, &heuristic_pages, top_margin, bottom_margin);
+
+    // Detect font encoding issues on heuristic pages.
+    for &i in &heuristic_pages {
+        let page = pages.get(i as PdfPageIndex).map_err(|e| {
+            crate::pdf::error::PdfError::TextExtractionFailed(format!("Failed to get page {}: {:?}", i, e))
+        })?;
+        if build_ligature_repair_map(&page).is_some() {
+            has_font_encoding_issues = true;
+            break;
+        }
+    }
+
+    // Stage 2: Global font-size clustering (heuristic pages + struct tree pages needing classification).
+    let (heading_map, struct_tree_needs_classify) =
+        build_heading_map(&all_page_segments, &struct_tree_results, &heuristic_pages, k_clusters)?;
 
     // Compute the document-level body text font size from the heading map.
     // This is the centroid of the cluster NOT classified as a heading.
