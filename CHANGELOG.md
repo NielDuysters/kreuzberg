@@ -118,6 +118,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CI Go**: Updated all CI workflows to Go 1.26 (matching `go.work` requirement).
 - **CI R**: Vendor script now copies root `Cargo.lock` to ensure consistent dependency resolution.
 - **PDF image extraction** (#511): Fixed extracted images returning raw compressed data instead of properly decoded image bytes.
+- **Node.js `extractFileInWorker` mime_type passthrough** (#523): The `extract_file_in_worker` NAPI binding had its third parameter named `password` instead of `mime_type`, causing the MIME type passed from TypeScript to be silently injected into PDF password config while `None` was passed to `extract_file_sync`. Renamed the parameter and removed the incorrect password injection block so explicit MIME types are now correctly forwarded.
+- **DOCX parser type inference failure** (#519): Added explicit `as &[u8]` casts to all `name().as_ref()` and `local_name().as_ref()` calls in the DOCX and XML parsers. The `zip` 8.2.0 dependency introduced `typed-path`, creating ambiguity for the compiler when resolving `AsRef` on quick-xml's `LocalName` and `QName` types.
 
 ---
 
