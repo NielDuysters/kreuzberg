@@ -1535,6 +1535,9 @@ if ($result->pages !== null) {
 ---
 
 ## PDF Rendering
+
+!!! info "Added in v4.6.2"
+
 ### render_pdf_page()
 
 Render a single page of a PDF as a PNG image.

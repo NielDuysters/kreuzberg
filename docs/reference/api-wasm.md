@@ -1921,6 +1921,9 @@ Common MIME types supported by Kreuzberg WASM:
 ---
 
 ## PDF Rendering
+
+!!! info "Added in v4.6.2"
+
 ### renderPdfPageSync()
 
 Render a single page of a PDF as a PNG image (synchronous).

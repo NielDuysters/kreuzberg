@@ -440,6 +440,9 @@ char *kreuzberg_load_extraction_config_from_file(const char *file_path);
 ---
 
 ## PDF Rendering
+
+!!! info "Added in v4.6.2"
+
 ### kreuzberg_render_pdf_page
 
 Render a single page of a PDF as a PNG image.

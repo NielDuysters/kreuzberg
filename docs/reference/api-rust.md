@@ -1407,6 +1407,8 @@ fn main() -> kreuzberg::Result<()> {
 
 ## PDF Rendering
 
+!!! info "Added in v4.6.2"
+
 ### render_pdf_page_to_png()
 
 Render a single page of a PDF as a PNG image.

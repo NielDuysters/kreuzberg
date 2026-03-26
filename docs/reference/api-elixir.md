@@ -1574,6 +1574,9 @@ Validate an OCR backend name.
 ---
 
 ## PDF Rendering
+
+!!! info "Added in v4.6.2"
+
 ### Kreuzberg.render_pdf_page/3
 
 Render a single page of a PDF as a PNG image.

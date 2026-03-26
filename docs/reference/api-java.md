@@ -1663,6 +1663,9 @@ for (String preset : presets) {
 ---
 
 ## PDF Rendering
+
+!!! info "Added in v4.6.2"
+
 ### Kreuzberg.renderPdfPage()
 
 Render a single page of a PDF as a PNG image.

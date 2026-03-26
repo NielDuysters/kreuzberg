@@ -166,6 +166,7 @@ nav:
       - Element-Based Output: guides/element-based-output.md
       - Document Structure: guides/document-structure.md
       - PDF Hierarchy: guides/pdf-hierarchy.md
+      - PDF Rendering: guides/pdf-rendering.md
       - Keyword Extraction: guides/keywords.md
       - Layout Detection: guides/layout-detection.md
       - Advanced Features: guides/advanced.md

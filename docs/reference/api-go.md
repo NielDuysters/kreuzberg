@@ -1337,6 +1337,9 @@ for imgIdx, img := range result.Images {
 ---
 
 ## PDF Rendering
+
+!!! info "Added in v4.6.2"
+
 ### RenderPdfPage
 
 Render a single page of a PDF as a PNG image.

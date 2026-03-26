@@ -1180,6 +1180,9 @@ See [Error Handling Reference](errors.md) for detailed error documentation and b
 ---
 
 ## PDF Rendering
+
+!!! info "Added in v4.6.2"
+
 ### render_pdf_page()
 
 Render a single PDF page as a PNG image.

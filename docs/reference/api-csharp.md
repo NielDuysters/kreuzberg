@@ -1713,6 +1713,9 @@ Metadata specific to XML documents.
 ---
 
 ## PDF Rendering
+
+!!! info "Added in v4.6.2"
+
 ### KreuzbergClient.RenderPdfPage()
 
 Render a single page of a PDF as a PNG image.
