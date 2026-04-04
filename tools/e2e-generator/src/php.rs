@@ -897,6 +897,48 @@ pub fn generate(fixtures: &[Fixture], output_dir: &Utf8Path, mode: &GenerationMo
         fs::write(tests_dir.join("RenderTest.php"), content).context("Failed to write PHP render test file")?;
     }
 
+    write_scripts(&php_root, mode)?;
+
+    Ok(())
+}
+
+fn write_scripts(php_root: &Utf8Path, mode: &GenerationMode) -> Result<()> {
+    if !mode.is_published() {
+        return Ok(());
+    }
+    let setup = php_root.join("setup.sh");
+    fs::write(
+        &setup,
+        r#"#!/usr/bin/env bash
+set -euo pipefail
+echo "Setting up PHP test app..."
+pie install kreuzberg/kreuzberg || echo "PIE install skipped (extension may already be loaded)"
+composer install
+echo "Setup complete."
+"#,
+    )
+    .context("Failed to write setup.sh")?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        fs::set_permissions(&setup, fs::Permissions::from_mode(0o755))?;
+    }
+
+    let run = php_root.join("run_tests.sh");
+    fs::write(
+        &run,
+        r#"#!/usr/bin/env bash
+set -euo pipefail
+echo "Running PHP tests..."
+php vendor/bin/phpunit tests/
+"#,
+    )
+    .context("Failed to write run_tests.sh")?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        fs::set_permissions(&run, fs::Permissions::from_mode(0o755))?;
+    }
     Ok(())
 }
 

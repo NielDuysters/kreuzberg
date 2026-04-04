@@ -645,10 +645,13 @@ fn write_gemfile(ruby_root: &Utf8Path, mode: &GenerationMode) -> Result<()> {
     let path = ruby_root.join("Gemfile");
     let content = match mode {
         GenerationMode::Local => RUBY_GEMFILE_TEMPLATE.to_string(),
-        GenerationMode::Published { version } => RUBY_GEMFILE_TEMPLATE.replace(
-            "gem 'kreuzberg', path: '../../packages/ruby'",
-            &format!("gem 'kreuzberg', '{version}'"),
-        ),
+        GenerationMode::Published { version } => {
+            let minor_version = version.rsplitn(2, '.').last().unwrap_or(version);
+            RUBY_GEMFILE_TEMPLATE.replace(
+                "gem 'kreuzberg', path: '../../packages/ruby'",
+                &format!("gem 'kreuzberg', '~> {minor_version}'"),
+            )
+        }
     };
     fs::write(&path, content).context("Failed to write Gemfile")
 }

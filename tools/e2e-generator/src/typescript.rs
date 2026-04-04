@@ -1025,6 +1025,13 @@ pub fn generate(fixtures: &[Fixture], output_root: &Utf8Path, mode: &GenerationM
             .context("Failed to write TypeScript render test file")?;
     }
 
+    if mode.is_published() {
+        let npmrc = ts_root.join(".npmrc");
+        fs::write(&npmrc, "shamefully-hoist=true\n").context("Failed to write .npmrc")?;
+        let ws = ts_root.join("pnpm-workspace.yaml");
+        fs::write(&ws, "packages: []\n").context("Failed to write pnpm-workspace.yaml")?;
+    }
+
     Ok(())
 }
 

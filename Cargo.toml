@@ -19,8 +19,8 @@ members = [
 exclude = [
     "packages/r/src/rust",
     "packages/ruby/ext/kreuzberg_rb/native",
-    "tests/test_apps/elixir",
-    "tests/test_apps/rust",
+    "test_apps/elixir",
+    "test_apps/rust",
 ]
 default-members = ["crates/kreuzberg", "crates/kreuzberg-cli"]
 resolver = "2"

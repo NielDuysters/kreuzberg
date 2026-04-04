@@ -731,6 +731,48 @@ pub fn generate(fixtures: &[Fixture], output_root: &Utf8Path, mode: &GenerationM
         fs::write(go_root.join("render_test.go"), content).context("Failed to write Go render test file")?;
     }
 
+    write_scripts(&go_root, mode)?;
+
+    Ok(())
+}
+
+fn write_scripts(go_root: &Utf8Path, mode: &GenerationMode) -> Result<()> {
+    if !mode.is_published() {
+        return Ok(());
+    }
+    let setup = go_root.join("setup.sh");
+    fs::write(
+        &setup,
+        r#"#!/usr/bin/env bash
+set -euo pipefail
+echo "Setting up Go test app..."
+go generate github.com/kreuzberg-dev/kreuzberg/packages/go/v4/...
+GOWORK=off go mod tidy
+echo "Setup complete."
+"#,
+    )
+    .context("Failed to write setup.sh")?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        fs::set_permissions(&setup, fs::Permissions::from_mode(0o755))?;
+    }
+
+    let run = go_root.join("run_tests.sh");
+    fs::write(
+        &run,
+        r#"#!/usr/bin/env bash
+set -euo pipefail
+echo "Running Go tests..."
+GOWORK=off go test -v -count=1 ./...
+"#,
+    )
+    .context("Failed to write run_tests.sh")?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        fs::set_permissions(&run, fs::Permissions::from_mode(0o755))?;
+    }
     Ok(())
 }
 

@@ -978,6 +978,13 @@ export default defineConfig({
         fs::write(&vitest_path, vitest_config).context("Failed to write vitest.config.ts")?;
     }
 
+    if mode.is_published() {
+        let npmrc = output_dir.join(".npmrc");
+        fs::write(&npmrc, "shamefully-hoist=true\n").context("Failed to write .npmrc")?;
+        let ws = output_dir.join("pnpm-workspace.yaml");
+        fs::write(&ws, "packages: []\n").context("Failed to write pnpm-workspace.yaml")?;
+    }
+
     Ok(())
 }
 

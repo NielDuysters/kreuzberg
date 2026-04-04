@@ -877,6 +877,32 @@ pub fn generate(fixtures: &[Fixture], output_root: &Utf8Path, mode: &GenerationM
 
     write_makefile_with_tests(&c_root, &test_names, mode)?;
 
+    write_setup_script(&c_root, mode)?;
+
+    Ok(())
+}
+
+fn write_setup_script(c_root: &Utf8Path, mode: &GenerationMode) -> Result<()> {
+    if !mode.is_published() {
+        return Ok(());
+    }
+    let setup = c_root.join("setup.sh");
+    fs::write(
+        &setup,
+        r#"#!/usr/bin/env bash
+set -euo pipefail
+echo "Setting up C test app..."
+# Install kreuzberg-ffi library
+cargo install kreuzberg-cli
+echo "Setup complete. Ensure kreuzberg FFI headers and library are in ~/.kreuzberg/"
+"#,
+    )
+    .context("Failed to write setup.sh")?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        fs::set_permissions(&setup, fs::Permissions::from_mode(0o755))?;
+    }
     Ok(())
 }
 
