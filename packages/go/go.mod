@@ -1,3 +1,3 @@
-module github.com/kreuzberg-dev/kreuzberg/v4
+module github.com/kreuzberg-dev/kreuzberg/v5
 
 go 1.26

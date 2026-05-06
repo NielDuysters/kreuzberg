@@ -2,7 +2,7 @@
 title: "Java API Reference"
 ---
 
-## Java API Reference <span class="version-badge">v4.10.0-rc.15</span>
+## Java API Reference <span class="version-badge">v5.0.0-rc.1</span>
 
 ### Functions
 
@@ -1150,7 +1150,7 @@ Available when the `djot` feature is enabled.
 | `plainText` | `String` | — | Plain text representation for backwards compatibility |
 | `blocks` | `List<FormattedBlock>` | — | Structured block-level content |
 | `metadata` | `Metadata` | — | Metadata from YAML frontmatter |
-| `tables` | `List<String>` | — | Extracted tables as structured data |
+| `tables` | `List<Table>` | — | Extracted tables as structured data |
 | `images` | `List<DjotImage>` | — | Extracted images with metadata |
 | `links` | `List<DjotLink>` | — | Extracted links with URLs |
 | `footnotes` | `List<Footnote>` | — | Footnote definitions |
@@ -1786,12 +1786,15 @@ Error metadata (for batch operations).
 
 #### ExcelMetadata
 
-Excel/spreadsheet metadata marker.
+Excel/spreadsheet format metadata.
 
-Sheet count and sheet names are now exposed directly on `Metadata` as
-`sheet_count: Option<usize>` and `sheet_names: Option<Vec<String>>` so that
-every binding (Rust, Python, Node, …) sees them at the same path. This
-struct remains as a `FormatMetadata` variant tag for spreadsheet sources.
+Identifies the document as a spreadsheet source via the `FormatMetadata.Excel`
+discriminant. Sheet count and sheet names are stored inside this struct.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `sheetCount` | `Optional<Long>` | `null` | Number of sheets in the workbook. |
+| `sheetNames` | `Optional<List<String>>` | `Collections.emptyList()` | Names of all sheets in the workbook. |
 
 
 ---
@@ -1930,7 +1933,7 @@ It can be loaded from TOML, YAML, or JSON files, or created programmatically.
 | `extractionTimeoutSecs` | `Optional<Long>` | `null` | Default per-file timeout in seconds for batch extraction. When set, each file in a batch will be canceled after this duration unless overridden by `FileExtractionConfig.timeout_secs`. `null` means no timeout (unbounded extraction time). |
 | `maxConcurrentExtractions` | `Optional<Long>` | `null` | Maximum concurrent extractions in batch operations (None = (num_cpus × 1.5).ceil()). Limits parallelism to prevent resource exhaustion when processing large batches. Defaults to (num_cpus × 1.5).ceil() when not set. |
 | `resultFormat` | `ResultFormat` | `ResultFormat.UNIFIED` | Result structure format Controls whether results are returned in unified format (default) with all content in the `content` field, or element-based format with semantic elements (for Unstructured-compatible output). |
-| `securityLimits` | `Optional<String>` | `null` | Security limits for archive extraction. Controls maximum archive size, compression ratio, file count, and other security thresholds to prevent decompression bomb attacks. Also caps nesting depth, iteration count, entity / token length, cumulative content size, and table cell count for every extraction path that ingests user-controlled bytes. When `null`, default limits are used. |
+| `securityLimits` | `Optional<SecurityLimits>` | `null` | Security limits for archive extraction. Controls maximum archive size, compression ratio, file count, and other security thresholds to prevent decompression bomb attacks. Also caps nesting depth, iteration count, entity / token length, cumulative content size, and table cell count for every extraction path that ingests user-controlled bytes. When `null`, default limits are used. |
 | `outputFormat` | `OutputFormat` | `OutputFormat.PLAIN` | Content text format (default: Plain). Controls the format of the extracted content: - `Plain`: Raw extracted text (default) - `Markdown`: Markdown formatted output - `Djot`: Djot markup format (requires djot feature) - `Html`: HTML formatted output When set to a structured format, extraction results will include formatted output. The `formatted_content` field may be populated when format conversion is applied. |
 | `layout` | `Optional<LayoutDetectionConfig>` | `null` | Layout detection configuration (None = layout detection disabled). When set, PDF pages and images are analyzed for document structure (headings, code, formulas, tables, figures, etc.) using RT-DETR models via ONNX Runtime. For PDFs, layout hints override paragraph classification in the markdown pipeline. For images, per-region OCR is performed with markdown formatting based on detected layout classes. Requires the `layout-detection` feature. |
 | `includeDocumentStructure` | `boolean` | `false` | Enable structured document tree output. When true, populates the `document` field on `ExtractionResult` with a hierarchical `DocumentStructure` containing heading-driven section nesting, table grids, content layer classification, and inline annotations. Independent of `result_format` — can be combined with Unified or ElementBased. |
@@ -1989,7 +1992,7 @@ This is the main result type returned by all extraction functions.
 | `mimeType` | `String` | — | The detected MIME type |
 | `metadata` | `Metadata` | — | Document metadata |
 | `extractionMethod` | `Optional<ExtractionMethod>` | `null` | Extraction strategy used to produce the returned text. Populated when the extractor can reliably distinguish native text extraction, OCR-only extraction, or mixed native/OCR output. |
-| `tables` | `List<String>` | `Collections.emptyList()` | Tables extracted from the document |
+| `tables` | `List<Table>` | `Collections.emptyList()` | Tables extracted from the document |
 | `detectedLanguages` | `Optional<List<String>>` | `Collections.emptyList()` | Detected languages |
 | `chunks` | `Optional<List<Chunk>>` | `Collections.emptyList()` | Text chunks when chunking is enabled. When chunking configuration is provided, the content is split into overlapping chunks for efficient processing. Each chunk contains the text, optional embeddings (if enabled), and metadata about its position. |
 | `images` | `Optional<List<ExtractedImage>>` | `Collections.emptyList()` | Extracted images from the document. When image extraction is enabled via `ImageExtractionConfig`, this field contains all images found in the document with their raw data and metadata. Each image may optionally contain a nested `ocr_result` if OCR was performed. |
@@ -2116,17 +2119,6 @@ Individual grid cell with position and span metadata.
 | `colSpan` | `int` | — | Number of columns this cell spans. |
 | `isHeader` | `boolean` | — | Whether this is a header cell. |
 | `bbox` | `Optional<String>` | `null` | Bounding box for this cell (if available). |
-
-
----
-
-#### HeaderFooter
-
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `paragraphs` | `List<String>` | `Collections.emptyList()` | Paragraphs |
-| `tables` | `List<String>` | `Collections.emptyList()` | Tables extracted from the document |
-| `headerType` | `String` | — | Header type |
 
 
 ---
@@ -2693,7 +2685,7 @@ via a discriminated union, and additional custom fields from postprocessors.
 | `createdBy` | `Optional<String>` | `null` | User who created the document |
 | `modifiedBy` | `Optional<String>` | `null` | User who last modified the document |
 | `pages` | `Optional<PageStructure>` | `null` | Page/slide/sheet structure with boundaries |
-| `format` | `Optional<FormatMetadata>` | `null` | Format-specific metadata (discriminated union) Contains detailed metadata specific to the document format. Serializes with a `format_type` discriminator field. |
+| `format` | `Optional<FormatMetadata>` | `null` | Format-specific metadata (discriminated union) Contains detailed metadata specific to the document format. Serialized as a nested `"format"` object with a `format_type` discriminator field. |
 | `imagePreprocessing` | `Optional<ImagePreprocessingMetadata>` | `null` | Image preprocessing metadata (when OCR preprocessing was applied) |
 | `jsonSchema` | `Optional<Object>` | `null` | JSON schema (for structured data extraction) |
 | `error` | `Optional<ErrorMetadata>` | `null` | Error metadata (for batch operations) |
@@ -2703,9 +2695,7 @@ via a discriminated union, and additional custom fields from postprocessors.
 | `documentVersion` | `Optional<String>` | `null` | Document version string (from frontmatter). |
 | `abstractText` | `Optional<String>` | `null` | Abstract or summary text (from frontmatter). |
 | `outputFormat` | `Optional<String>` | `null` | Output format identifier (e.g., "markdown", "html", "text"). Set by the output format pipeline stage when format conversion is applied. Previously stored in `metadata.additional["output_format"]`. |
-| `sheetCount` | `Optional<Long>` | `null` | Number of sheets in the workbook (Excel/spreadsheet sources only). `null` for non-spreadsheet documents. Mirrors the JSON-flat field already exposed via the `FormatMetadata.Excel` flatten so all bindings see it at `metadata.sheet_count`. |
-| `sheetNames` | `Optional<List<String>>` | `Collections.emptyList()` | Sheet names in the workbook (Excel/spreadsheet sources only). `null` for non-spreadsheet documents. |
-| `additional` | `Map<String, Object>` | `Collections.emptyMap()` | Additional custom fields from postprocessors. **Deprecated**: Prefer using typed fields on `ExtractionResult` and `Metadata` instead of inserting into this map. Typed fields provide better cross-language compatibility and type safety. This field will be removed in a future major version. This flattened map allows Python/TypeScript postprocessors to add arbitrary fields (entity extraction, keyword extraction, etc.). Fields are merged at the root level during serialization. Uses `Cow<'static, str>` keys so static string keys avoid allocation. |
+| `additional` | `Map<String, Object>` | `Collections.emptyMap()` | Additional custom fields from postprocessors. Serialized as a nested `"additional"` object (not flattened at root level). Uses `Cow<'static, str>` keys so static string keys avoid allocation. |
 
 ##### Methods
 
@@ -2733,17 +2723,6 @@ Combined paths to all models needed for OCR (backward compatibility).
 | `clsModel` | `String` | — | Path to the classification model directory. |
 | `recModel` | `String` | — | Path to the recognition model directory. |
 | `dictFile` | `String` | — | Path to the character dictionary file. |
-
-
----
-
-#### Note
-
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `id` | `String` | — | Unique identifier |
-| `noteType` | `String` | — | Note type |
-| `paragraphs` | `List<String>` | — | Paragraphs |
 
 
 ---
@@ -3399,7 +3378,7 @@ by avoiding redundant copies during serialization.
 |-------|------|---------|-------------|
 | `pageNumber` | `long` | — | Page number (1-indexed) |
 | `content` | `String` | — | Text content for this page |
-| `tables` | `List<String>` | — | Tables found on this page (uses Arc for memory efficiency) Serializes as Vec<Table> for JSON compatibility while maintaining Arc semantics in-memory for zero-copy sharing. |
+| `tables` | `List<Table>` | — | Tables found on this page (uses Arc for memory efficiency) Serializes as Vec<Table> for JSON compatibility while maintaining Arc semantics in-memory for zero-copy sharing. |
 | `images` | `List<ExtractedImage>` | — | Images found on this page (uses Arc for memory efficiency) Serializes as Vec<ExtractedImage> for JSON compatibility while maintaining Arc semantics in-memory for zero-copy sharing. |
 | `hierarchy` | `Optional<PageHierarchy>` | `null` | Hierarchy information for the page (when hierarchy extraction is enabled) Contains text hierarchy levels (H1-H6) extracted from the page content. |
 | `isBlank` | `Optional<Boolean>` | `null` | Whether this page is blank (no meaningful text content) Determined during extraction based on text content analysis. A page is blank if it has fewer than 3 non-whitespace characters and contains no tables or images. |
@@ -4037,6 +4016,38 @@ Fully resolved (flattened) style after walking the inheritance chain.
 
 ---
 
+#### SecurityLimits
+
+Configuration for security limits across extractors.
+
+All limits are intentionally conservative to prevent DoS attacks
+while still supporting legitimate documents.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `maxArchiveSize` | `long` | `524288000` | Maximum uncompressed size for archives (500 MB) |
+| `maxCompressionRatio` | `long` | `100` | Maximum compression ratio before flagging as potential bomb (100:1) |
+| `maxFilesInArchive` | `long` | `10000` | Maximum number of files in archive (10,000) |
+| `maxNestingDepth` | `long` | `1024` | Maximum nesting depth for structures (100) |
+| `maxEntityLength` | `long` | `1048576` | Maximum length of any single XML entity / attribute / token (1 MiB). This is a per-token cap, NOT a cumulative cap — billion-laughs class attacks where a single entity expands to hundreds of MB are caught here, while normal long text content (a paragraph, a CDATA block) is caught by `max_content_size` instead. |
+| `maxContentSize` | `long` | `104857600` | Maximum string growth per document (100 MB) |
+| `maxIterations` | `long` | `10000000` | Maximum iterations per operation |
+| `maxXmlDepth` | `long` | `1024` | Maximum XML depth (100 levels) |
+| `maxTableCells` | `long` | `100000` | Maximum cells per table (100,000) |
+
+##### Methods
+
+###### defaultOptions()
+
+**Signature:**
+
+```java
+public static SecurityLimits defaultOptions()
+```
+
+
+---
+
 #### ServerConfig
 
 API server configuration.
@@ -4266,6 +4277,39 @@ An `InternalDocument` containing the extracted elements, metadata, and tables.
 ```java
 public String extractSync(byte[] content, String mimeType, ExtractionConfig config) throws Error
 ```
+
+
+---
+
+#### Table
+
+Extracted table structure.
+
+Represents a table detected and extracted from a document (PDF, image, etc.).
+Tables are converted to both structured cell data and Markdown format.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `cells` | `List<List<String>>` | `Collections.emptyList()` | Table cells as a 2D vector (rows × columns) |
+| `markdown` | `String` | — | Markdown representation of the table |
+| `pageNumber` | `long` | — | Page number where the table was found (1-indexed) |
+| `boundingBox` | `Optional<String>` | `null` | Bounding box of the table on the page (PDF coordinates: x0=left, y0=bottom, x1=right, y1=top). Only populated for PDF-extracted tables when position data is available. |
+
+
+---
+
+#### TableCell
+
+Individual table cell with content and optional styling.
+
+Future extension point for rich table support with cell-level metadata.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `content` | `String` | — | Cell content as text |
+| `rowSpan` | `long` | — | Row span (number of rows this cell spans) |
+| `colSpan` | `long` | — | Column span (number of columns this cell spans) |
+| `isHeader` | `boolean` | — | Whether this is a header cell |
 
 
 ---

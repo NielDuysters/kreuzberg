@@ -2,7 +2,7 @@
 title: "R API Reference"
 ---
 
-## R API Reference <span class="version-badge">v4.10.0-rc.15</span>
+## R API Reference <span class="version-badge">v5.0.0-rc.1</span>
 
 ### Functions
 
@@ -1786,12 +1786,15 @@ Error metadata (for batch operations).
 
 #### ExcelMetadata
 
-Excel/spreadsheet metadata marker.
+Excel/spreadsheet format metadata.
 
-Sheet count and sheet names are now exposed directly on `Metadata` as
-`sheet_count: Option<usize>` and `sheet_names: Option<Vec<String>>` so that
-every binding (Rust, Python, Node, …) sees them at the same path. This
-struct remains as a `FormatMetadata` variant tag for spreadsheet sources.
+Identifies the document as a spreadsheet source via the `FormatMetadata.Excel`
+discriminant. Sheet count and sheet names are stored inside this struct.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `sheet_count` | `integer or NULL` | `NULL` | Number of sheets in the workbook. |
+| `sheet_names` | `list or NULL` | `list()` | Names of all sheets in the workbook. |
 
 
 ---
@@ -1930,7 +1933,7 @@ It can be loaded from TOML, YAML, or JSON files, or created programmatically.
 | `extraction_timeout_secs` | `integer or NULL` | `NULL` | Default per-file timeout in seconds for batch extraction. When set, each file in a batch will be canceled after this duration unless overridden by `FileExtractionConfig.timeout_secs`. `NULL` means no timeout (unbounded extraction time). |
 | `max_concurrent_extractions` | `integer or NULL` | `NULL` | Maximum concurrent extractions in batch operations (None = (num_cpus × 1.5).ceil()). Limits parallelism to prevent resource exhaustion when processing large batches. Defaults to (num_cpus × 1.5).ceil() when not set. |
 | `result_format` | `ResultFormat` | `"unified"` | Result structure format Controls whether results are returned in unified format (default) with all content in the `content` field, or element-based format with semantic elements (for Unstructured-compatible output). |
-| `security_limits` | `character or NULL` | `NULL` | Security limits for archive extraction. Controls maximum archive size, compression ratio, file count, and other security thresholds to prevent decompression bomb attacks. Also caps nesting depth, iteration count, entity / token length, cumulative content size, and table cell count for every extraction path that ingests user-controlled bytes. When `NULL`, default limits are used. |
+| `security_limits` | `SecurityLimits or NULL` | `NULL` | Security limits for archive extraction. Controls maximum archive size, compression ratio, file count, and other security thresholds to prevent decompression bomb attacks. Also caps nesting depth, iteration count, entity / token length, cumulative content size, and table cell count for every extraction path that ingests user-controlled bytes. When `NULL`, default limits are used. |
 | `output_format` | `OutputFormat` | `"plain"` | Content text format (default: Plain). Controls the format of the extracted content: - `Plain`: Raw extracted text (default) - `Markdown`: Markdown formatted output - `Djot`: Djot markup format (requires djot feature) - `Html`: HTML formatted output When set to a structured format, extraction results will include formatted output. The `formatted_content` field may be populated when format conversion is applied. |
 | `layout` | `LayoutDetectionConfig or NULL` | `NULL` | Layout detection configuration (None = layout detection disabled). When set, PDF pages and images are analyzed for document structure (headings, code, formulas, tables, figures, etc.) using RT-DETR models via ONNX Runtime. For PDFs, layout hints override paragraph classification in the markdown pipeline. For images, per-region OCR is performed with markdown formatting based on detected layout classes. Requires the `layout-detection` feature. |
 | `include_document_structure` | `logical` | `false` | Enable structured document tree output. When true, populates the `document` field on `ExtractionResult` with a hierarchical `DocumentStructure` containing heading-driven section nesting, table grids, content layer classification, and inline annotations. Independent of `result_format` — can be combined with Unified or ElementBased. |
@@ -2116,17 +2119,6 @@ Individual grid cell with position and span metadata.
 | `col_span` | `integer` | — | Number of columns this cell spans. |
 | `is_header` | `logical` | — | Whether this is a header cell. |
 | `bbox` | `character or NULL` | `NULL` | Bounding box for this cell (if available). |
-
-
----
-
-#### HeaderFooter
-
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `paragraphs` | `list` | `list()` | Paragraphs |
-| `tables` | `list` | `list()` | Tables extracted from the document |
-| `header_type` | `character` | — | Header type |
 
 
 ---
@@ -2693,7 +2685,7 @@ via a discriminated union, and additional custom fields from postprocessors.
 | `created_by` | `character or NULL` | `NULL` | User who created the document |
 | `modified_by` | `character or NULL` | `NULL` | User who last modified the document |
 | `pages` | `PageStructure or NULL` | `NULL` | Page/slide/sheet structure with boundaries |
-| `format` | `FormatMetadata or NULL` | `NULL` | Format-specific metadata (discriminated union) Contains detailed metadata specific to the document format. Serializes with a `format_type` discriminator field. |
+| `format` | `FormatMetadata or NULL` | `NULL` | Format-specific metadata (discriminated union) Contains detailed metadata specific to the document format. Serialized as a nested `"format"` object with a `format_type` discriminator field. |
 | `image_preprocessing` | `ImagePreprocessingMetadata or NULL` | `NULL` | Image preprocessing metadata (when OCR preprocessing was applied) |
 | `json_schema` | `list or NULL` | `NULL` | JSON schema (for structured data extraction) |
 | `error` | `ErrorMetadata or NULL` | `NULL` | Error metadata (for batch operations) |
@@ -2703,9 +2695,7 @@ via a discriminated union, and additional custom fields from postprocessors.
 | `document_version` | `character or NULL` | `NULL` | Document version string (from frontmatter). |
 | `abstract_text` | `character or NULL` | `NULL` | Abstract or summary text (from frontmatter). |
 | `output_format` | `character or NULL` | `NULL` | Output format identifier (e.g., "markdown", "html", "text"). Set by the output format pipeline stage when format conversion is applied. Previously stored in `metadata.additional["output_format"]`. |
-| `sheet_count` | `integer or NULL` | `NULL` | Number of sheets in the workbook (Excel/spreadsheet sources only). `NULL` for non-spreadsheet documents. Mirrors the JSON-flat field already exposed via the `FormatMetadata.Excel` flatten so all bindings see it at `metadata.sheet_count`. |
-| `sheet_names` | `list or NULL` | `list()` | Sheet names in the workbook (Excel/spreadsheet sources only). `NULL` for non-spreadsheet documents. |
-| `additional` | `list` | `list()` | Additional custom fields from postprocessors. **Deprecated**: Prefer using typed fields on `ExtractionResult` and `Metadata` instead of inserting into this map. Typed fields provide better cross-language compatibility and type safety. This field will be removed in a future major version. This flattened map allows Python/TypeScript postprocessors to add arbitrary fields (entity extraction, keyword extraction, etc.). Fields are merged at the root level during serialization. Uses `Cow<'static, str>` keys so static string keys avoid allocation. |
+| `additional` | `list` | `list()` | Additional custom fields from postprocessors. Serialized as a nested `"additional"` object (not flattened at root level). Uses `Cow<'static, str>` keys so static string keys avoid allocation. |
 
 ##### Methods
 
@@ -2733,17 +2723,6 @@ Combined paths to all models needed for OCR (backward compatibility).
 | `cls_model` | `character` | — | Path to the classification model directory. |
 | `rec_model` | `character` | — | Path to the recognition model directory. |
 | `dict_file` | `character` | — | Path to the character dictionary file. |
-
-
----
-
-#### Note
-
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `id` | `character` | — | Unique identifier |
-| `note_type` | `character` | — | Note type |
-| `paragraphs` | `list` | — | Paragraphs |
 
 
 ---
@@ -4037,6 +4016,38 @@ Fully resolved (flattened) style after walking the inheritance chain.
 
 ---
 
+#### SecurityLimits
+
+Configuration for security limits across extractors.
+
+All limits are intentionally conservative to prevent DoS attacks
+while still supporting legitimate documents.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `max_archive_size` | `integer` | `524288000` | Maximum uncompressed size for archives (500 MB) |
+| `max_compression_ratio` | `integer` | `100` | Maximum compression ratio before flagging as potential bomb (100:1) |
+| `max_files_in_archive` | `integer` | `10000` | Maximum number of files in archive (10,000) |
+| `max_nesting_depth` | `integer` | `1024` | Maximum nesting depth for structures (100) |
+| `max_entity_length` | `integer` | `1048576` | Maximum length of any single XML entity / attribute / token (1 MiB). This is a per-token cap, NOT a cumulative cap — billion-laughs class attacks where a single entity expands to hundreds of MB are caught here, while normal long text content (a paragraph, a CDATA block) is caught by `max_content_size` instead. |
+| `max_content_size` | `integer` | `104857600` | Maximum string growth per document (100 MB) |
+| `max_iterations` | `integer` | `10000000` | Maximum iterations per operation |
+| `max_xml_depth` | `integer` | `1024` | Maximum XML depth (100 levels) |
+| `max_table_cells` | `integer` | `100000` | Maximum cells per table (100,000) |
+
+##### Methods
+
+###### default()
+
+**Signature:**
+
+```r
+default()
+```
+
+
+---
+
 #### ServerConfig
 
 API server configuration.
@@ -4266,6 +4277,39 @@ An `InternalDocument` containing the extracted elements, metadata, and tables.
 ```r
 extract_sync(content, mime_type, config)
 ```
+
+
+---
+
+#### Table
+
+Extracted table structure.
+
+Represents a table detected and extracted from a document (PDF, image, etc.).
+Tables are converted to both structured cell data and Markdown format.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `cells` | `list` | `list()` | Table cells as a 2D vector (rows × columns) |
+| `markdown` | `character` | — | Markdown representation of the table |
+| `page_number` | `integer` | — | Page number where the table was found (1-indexed) |
+| `bounding_box` | `character or NULL` | `NULL` | Bounding box of the table on the page (PDF coordinates: x0=left, y0=bottom, x1=right, y1=top). Only populated for PDF-extracted tables when position data is available. |
+
+
+---
+
+#### TableCell
+
+Individual table cell with content and optional styling.
+
+Future extension point for rich table support with cell-level metadata.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `content` | `character` | — | Cell content as text |
+| `row_span` | `integer` | — | Row span (number of rows this cell spans) |
+| `col_span` | `integer` | — | Column span (number of columns this cell spans) |
+| `is_header` | `logical` | — | Whether this is a header cell |
 
 
 ---

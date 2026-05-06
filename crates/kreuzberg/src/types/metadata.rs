@@ -106,6 +106,13 @@ impl Default for FormatMetadata {
     }
 }
 
+impl FormatMetadata {
+    /// Returns the Excel metadata if this is an Excel format, or `None` otherwise.
+    pub fn excel(&self) -> Option<&ExcelMetadata> {
+        if let Self::Excel(e) = self { Some(e) } else { None }
+    }
+}
+
 /// Extraction result metadata.
 ///
 /// Contains common fields applicable to all formats, format-specific metadata
