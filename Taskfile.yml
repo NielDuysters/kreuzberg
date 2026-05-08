@@ -292,9 +292,23 @@ tasks:
     cmds:
       - alef test --e2e --lang r
 
+  dart:codegen:
+    desc: "Generate flutter_rust_bridge bindings for Dart"
+    cmds:
+      - command -v flutter_rust_bridge_codegen >/dev/null 2>&1 || cargo install flutter_rust_bridge_codegen --version 2.12.0
+      - cd packages/dart && dart pub get
+      - cd packages/dart/rust && flutter_rust_bridge_codegen generate --config-file flutter_rust_bridge.yaml
+
+  dart:setup:
+    desc: "Setup Dart binding (codegen + native lib build)"
+    cmds:
+      - task: dart:codegen
+      - cargo build --release -p kreuzberg-dart
+
   dart:e2e:
     desc: "Run Dart e2e tests"
     cmds:
+      - task: dart:setup
       - alef test --e2e --lang dart
 
   gleam:e2e:

@@ -1102,9 +1102,9 @@ e2e = "cd e2e/swift && swift test"
 
 [crates.test.dart]
 precondition = "command -v dart >/dev/null 2>&1"
-before = "cargo build --release -p kreuzberg-dart"
-command = "cd packages/dart && dart pub get && dart test"
-e2e = "cd e2e/dart && dart pub get && dart test"
+before = "{ command -v flutter_rust_bridge_codegen >/dev/null 2>&1 || cargo install flutter_rust_bridge_codegen --version 2.12.0; } && cd packages/dart && dart pub get && cd rust && flutter_rust_bridge_codegen generate --config-file flutter_rust_bridge.yaml && cd ../../.. && cargo build --release -p kreuzberg-dart"
+command = "cd packages/dart && DYLD_FALLBACK_LIBRARY_PATH=$PWD/../../target/release LD_LIBRARY_PATH=$PWD/../../target/release dart pub get && DYLD_FALLBACK_LIBRARY_PATH=$PWD/../../target/release LD_LIBRARY_PATH=$PWD/../../target/release dart test"
+e2e = "cd e2e/dart && DYLD_FALLBACK_LIBRARY_PATH=$PWD/../../target/release LD_LIBRARY_PATH=$PWD/../../target/release dart pub get && DYLD_FALLBACK_LIBRARY_PATH=$PWD/../../target/release LD_LIBRARY_PATH=$PWD/../../target/release dart test"
 
 [crates.test.gleam]
 precondition = "command -v gleam >/dev/null 2>&1"
