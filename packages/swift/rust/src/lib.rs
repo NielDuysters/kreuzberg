@@ -3087,7 +3087,7 @@ impl BatchBytesItem {
         self.0.content.to_vec()
     }
     pub fn mime_type(&self) -> String {
-        serde_json::to_string(&self.0.mime_type).unwrap_or_default()
+        self.0.mime_type.clone()
     }
     pub fn config(&self) -> Option<FileExtractionConfig> {
         self.0.config.clone().map(FileExtractionConfig)
@@ -3199,7 +3199,7 @@ impl TokenReductionOptions {
         TokenReductionOptions(__target)
     }
     pub fn mode(&self) -> String {
-        serde_json::to_string(&self.0.mode).unwrap_or_default()
+        self.0.mode.clone()
     }
     pub fn preserve_important_words(&self) -> bool {
         ::serde_json::to_value(&self.0.preserve_important_words)
@@ -3281,7 +3281,7 @@ impl HtmlOutputConfig {
         HtmlTheme::from(self.0.theme.clone())
     }
     pub fn class_prefix(&self) -> String {
-        serde_json::to_string(&self.0.class_prefix).unwrap_or_default()
+        self.0.class_prefix.clone()
     }
     pub fn embed_css(&self) -> bool {
         ::serde_json::to_value(&self.0.embed_css)
@@ -3367,7 +3367,7 @@ impl LlmConfig {
         LlmConfig(__target)
     }
     pub fn model(&self) -> String {
-        serde_json::to_string(&self.0.model).unwrap_or_default()
+        self.0.model.clone()
     }
     pub fn api_key(&self) -> Option<String> {
         self.0.api_key.clone()
@@ -3411,7 +3411,7 @@ impl StructuredExtractionConfig {
         serde_json::to_string(&self.0.schema).unwrap_or_default()
     }
     pub fn schema_name(&self) -> String {
-        serde_json::to_string(&self.0.schema_name).unwrap_or_default()
+        self.0.schema_name.clone()
     }
     pub fn schema_description(&self) -> Option<String> {
         self.0.schema_description.clone()
@@ -3570,7 +3570,7 @@ impl OcrQualityThresholds {
 pub struct OcrPipelineStage(pub kreuzberg::OcrPipelineStage);
 impl OcrPipelineStage {
     pub fn backend(&self) -> String {
-        serde_json::to_string(&self.0.backend).unwrap_or_default()
+        self.0.backend.clone()
     }
     pub fn priority(&self) -> u32 {
         ::serde_json::to_value(&self.0.priority)
@@ -3681,10 +3681,10 @@ impl OcrConfig {
             .unwrap_or_default()
     }
     pub fn backend(&self) -> String {
-        serde_json::to_string(&self.0.backend).unwrap_or_default()
+        self.0.backend.clone()
     }
     pub fn language(&self) -> String {
-        serde_json::to_string(&self.0.language).unwrap_or_default()
+        self.0.language.clone()
     }
     pub fn tesseract_config(&self) -> Option<TesseractConfig> {
         self.0.tesseract_config.clone().map(TesseractConfig)
@@ -3750,7 +3750,7 @@ impl PageConfig {
             .unwrap_or_default()
     }
     pub fn marker_format(&self) -> String {
-        serde_json::to_string(&self.0.marker_format).unwrap_or_default()
+        self.0.marker_format.clone()
     }
 }
 
@@ -4224,10 +4224,10 @@ impl TreeSitterProcessConfig {
 pub struct SupportedFormat(pub kreuzberg::SupportedFormat);
 impl SupportedFormat {
     pub fn extension_(&self) -> String {
-        serde_json::to_string(&self.0.extension).unwrap_or_default()
+        self.0.extension.clone()
     }
     pub fn mime_type(&self) -> String {
-        serde_json::to_string(&self.0.mime_type).unwrap_or_default()
+        self.0.mime_type.clone()
     }
 }
 
@@ -4257,7 +4257,7 @@ impl ServerConfig {
         ServerConfig(__target)
     }
     pub fn host(&self) -> String {
-        serde_json::to_string(&self.0.host).unwrap_or_default()
+        self.0.host.clone()
     }
     pub fn port(&self) -> u16 {
         ::serde_json::to_value(&self.0.port)
@@ -4288,10 +4288,10 @@ impl ServerConfig {
 pub struct StructuredDataResult(pub kreuzberg::extraction::structured::StructuredDataResult);
 impl StructuredDataResult {
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn format(&self) -> String {
-        serde_json::to_string(&self.0.format).unwrap_or_default()
+        self.0.format.to_string()
     }
     pub fn metadata(&self) -> String {
         serde_json::to_string(&self.0.metadata).expect("serializable metadata")
@@ -4354,7 +4354,7 @@ impl ImageOcrResult {
 pub struct HtmlExtractionResult(pub kreuzberg::extraction::html::HtmlExtractionResult);
 impl HtmlExtractionResult {
     pub fn markdown(&self) -> String {
-        serde_json::to_string(&self.0.markdown).unwrap_or_default()
+        self.0.markdown.clone()
     }
     pub fn images(&self) -> Vec<ExtractedInlineImage> {
         self.0
@@ -4377,7 +4377,7 @@ impl ExtractedInlineImage {
         self.0.data.to_vec()
     }
     pub fn format(&self) -> String {
-        serde_json::to_string(&self.0.format).unwrap_or_default()
+        self.0.format.clone()
     }
     pub fn filename(&self) -> Option<String> {
         self.0.filename.clone()
@@ -5616,7 +5616,7 @@ impl PdfAnnotation {
 pub struct DjotContent(pub kreuzberg::DjotContent);
 impl DjotContent {
     pub fn plain_text(&self) -> String {
-        serde_json::to_string(&self.0.plain_text).unwrap_or_default()
+        self.0.plain_text.clone()
     }
     pub fn blocks(&self) -> Vec<FormattedBlock> {
         self.0.blocks.iter().map(|elem| FormattedBlock(elem.clone())).collect()
@@ -5687,7 +5687,7 @@ impl InlineElement {
         InlineType::from(self.0.element_type.clone())
     }
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn attributes(&self) -> Option<String> {
         self.0.attributes.as_ref().and_then(|v| serde_json::to_string(v).ok())
@@ -5700,10 +5700,10 @@ impl InlineElement {
 pub struct DjotImage(pub kreuzberg::DjotImage);
 impl DjotImage {
     pub fn src(&self) -> String {
-        serde_json::to_string(&self.0.src).unwrap_or_default()
+        self.0.src.clone()
     }
     pub fn alt(&self) -> String {
-        serde_json::to_string(&self.0.alt).unwrap_or_default()
+        self.0.alt.clone()
     }
     pub fn title(&self) -> Option<String> {
         self.0.title.clone()
@@ -5716,10 +5716,10 @@ impl DjotImage {
 pub struct DjotLink(pub kreuzberg::DjotLink);
 impl DjotLink {
     pub fn url(&self) -> String {
-        serde_json::to_string(&self.0.url).unwrap_or_default()
+        self.0.url.clone()
     }
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
     pub fn title(&self) -> Option<String> {
         self.0.title.clone()
@@ -5732,7 +5732,7 @@ impl DjotLink {
 pub struct Footnote(pub kreuzberg::Footnote);
 impl Footnote {
     pub fn label(&self) -> String {
-        serde_json::to_string(&self.0.label).unwrap_or_default()
+        self.0.label.clone()
     }
     pub fn content(&self) -> Vec<FormattedBlock> {
         self.0.content.iter().map(|elem| FormattedBlock(elem.clone())).collect()
@@ -5886,7 +5886,7 @@ impl TableGrid {
 pub struct GridCell(pub kreuzberg::GridCell);
 impl GridCell {
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn row(&self) -> u32 {
         ::serde_json::to_value(&self.0.row)
@@ -6051,10 +6051,10 @@ impl ExtractionResult {
         ExtractionResult(__target)
     }
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn mime_type(&self) -> String {
-        serde_json::to_string(&self.0.mime_type).unwrap_or_default()
+        self.0.mime_type.to_string()
     }
     pub fn metadata(&self) -> Metadata {
         Metadata(self.0.metadata.clone())
@@ -6173,10 +6173,10 @@ impl ExtractionResult {
 pub struct ArchiveEntry(pub kreuzberg::ArchiveEntry);
 impl ArchiveEntry {
     pub fn path(&self) -> String {
-        serde_json::to_string(&self.0.path).unwrap_or_default()
+        self.0.path.clone()
     }
     pub fn mime_type(&self) -> String {
-        serde_json::to_string(&self.0.mime_type).unwrap_or_default()
+        self.0.mime_type.clone()
     }
     pub fn result(&self) -> ExtractionResult {
         ExtractionResult(*self.0.result.clone())
@@ -6186,10 +6186,10 @@ impl ArchiveEntry {
 pub struct ProcessingWarning(pub kreuzberg::ProcessingWarning);
 impl ProcessingWarning {
     pub fn source(&self) -> String {
-        serde_json::to_string(&self.0.source).unwrap_or_default()
+        self.0.source.to_string()
     }
     pub fn message(&self) -> String {
-        serde_json::to_string(&self.0.message).unwrap_or_default()
+        self.0.message.to_string()
     }
 }
 
@@ -6229,10 +6229,10 @@ impl LlmUsage {
         LlmUsage(__target)
     }
     pub fn model(&self) -> String {
-        serde_json::to_string(&self.0.model).unwrap_or_default()
+        self.0.model.clone()
     }
     pub fn source(&self) -> String {
-        serde_json::to_string(&self.0.source).unwrap_or_default()
+        self.0.source.clone()
     }
     pub fn input_tokens(&self) -> Option<u64> {
         self.0.input_tokens.as_ref().and_then(|v| {
@@ -6270,7 +6270,7 @@ impl LlmUsage {
 pub struct Chunk(pub kreuzberg::Chunk);
 impl Chunk {
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn chunk_type(&self) -> ChunkType {
         ChunkType::from(self.0.chunk_type.clone())
@@ -6303,7 +6303,7 @@ impl HeadingLevel {
             .unwrap_or_default()
     }
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
 }
 
@@ -6365,7 +6365,7 @@ impl ExtractedImage {
         self.0.data.to_vec()
     }
     pub fn format(&self) -> String {
-        serde_json::to_string(&self.0.format).unwrap_or_default()
+        self.0.format.to_string()
     }
     pub fn image_index(&self) -> usize {
         ::serde_json::to_value(&self.0.image_index)
@@ -6477,7 +6477,7 @@ impl Element {
         ElementType::from(self.0.element_type.clone())
     }
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
     pub fn metadata(&self) -> ElementMetadata {
         ElementMetadata(self.0.metadata.clone())
@@ -6497,10 +6497,10 @@ impl ExcelWorkbook {
 pub struct ExcelSheet(pub kreuzberg::ExcelSheet);
 impl ExcelSheet {
     pub fn name(&self) -> String {
-        serde_json::to_string(&self.0.name).unwrap_or_default()
+        self.0.name.clone()
     }
     pub fn markdown(&self) -> String {
-        serde_json::to_string(&self.0.markdown).unwrap_or_default()
+        self.0.markdown.clone()
     }
     pub fn row_count(&self) -> usize {
         ::serde_json::to_value(&self.0.row_count)
@@ -6528,7 +6528,7 @@ impl ExcelSheet {
 pub struct XmlExtractionResult(pub kreuzberg::XmlExtractionResult);
 impl XmlExtractionResult {
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn element_count(&self) -> usize {
         ::serde_json::to_value(&self.0.element_count)
@@ -6547,7 +6547,7 @@ impl XmlExtractionResult {
 pub struct TextExtractionResult(pub kreuzberg::TextExtractionResult);
 impl TextExtractionResult {
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn line_count(&self) -> usize {
         ::serde_json::to_value(&self.0.line_count)
@@ -6593,7 +6593,7 @@ impl TextExtractionResult {
 pub struct PptxExtractionResult(pub kreuzberg::PptxExtractionResult);
 impl PptxExtractionResult {
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn metadata(&self) -> PptxMetadata {
         PptxMetadata(self.0.metadata.clone())
@@ -6681,7 +6681,7 @@ impl EmailExtractionResult {
         self.0.html_content.clone()
     }
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn attachments(&self) -> Vec<EmailAttachment> {
         self.0
@@ -6727,10 +6727,10 @@ impl EmailAttachment {
 pub struct OcrExtractionResult(pub kreuzberg::OcrExtractionResult);
 impl OcrExtractionResult {
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn mime_type(&self) -> String {
-        serde_json::to_string(&self.0.mime_type).unwrap_or_default()
+        self.0.mime_type.clone()
     }
     pub fn metadata(&self) -> String {
         serde_json::to_string(&self.0.metadata).expect("serializable metadata")
@@ -6753,7 +6753,7 @@ impl OcrTable {
         serde_json::to_string(&self.0.cells).expect("serializable cells")
     }
     pub fn markdown(&self) -> String {
-        serde_json::to_string(&self.0.markdown).unwrap_or_default()
+        self.0.markdown.clone()
     }
     pub fn page_number(&self) -> usize {
         ::serde_json::to_value(&self.0.page_number)
@@ -6850,7 +6850,7 @@ impl ImagePreprocessingConfig {
             .unwrap_or_default()
     }
     pub fn binarization_method(&self) -> String {
-        serde_json::to_string(&self.0.binarization_method).unwrap_or_default()
+        self.0.binarization_method.clone()
     }
     pub fn invert_colors(&self) -> bool {
         ::serde_json::to_value(&self.0.invert_colors)
@@ -6928,7 +6928,7 @@ impl TesseractConfig {
         TesseractConfig(__target)
     }
     pub fn language(&self) -> String {
-        serde_json::to_string(&self.0.language).unwrap_or_default()
+        self.0.language.clone()
     }
     pub fn psm(&self) -> i32 {
         ::serde_json::to_value(&self.0.psm)
@@ -6937,7 +6937,7 @@ impl TesseractConfig {
             .unwrap_or_default()
     }
     pub fn output_format(&self) -> String {
-        serde_json::to_string(&self.0.output_format).unwrap_or_default()
+        self.0.output_format.clone()
     }
     pub fn oem(&self) -> i32 {
         ::serde_json::to_value(&self.0.oem)
@@ -7015,10 +7015,10 @@ impl TesseractConfig {
             .unwrap_or_default()
     }
     pub fn tessedit_char_whitelist(&self) -> String {
-        serde_json::to_string(&self.0.tessedit_char_whitelist).unwrap_or_default()
+        self.0.tessedit_char_whitelist.clone()
     }
     pub fn tessedit_char_blacklist(&self) -> String {
-        serde_json::to_string(&self.0.tessedit_char_blacklist).unwrap_or_default()
+        self.0.tessedit_char_blacklist.clone()
     }
     pub fn tessedit_use_primary_params_model(&self) -> bool {
         ::serde_json::to_value(&self.0.tessedit_use_primary_params_model)
@@ -7086,7 +7086,7 @@ impl ImagePreprocessingMetadata {
         })
     }
     pub fn resample_method(&self) -> String {
-        serde_json::to_string(&self.0.resample_method).unwrap_or_default()
+        self.0.resample_method.clone()
     }
     pub fn dimension_clamped(&self) -> bool {
         ::serde_json::to_value(&self.0.dimension_clamped)
@@ -7480,7 +7480,7 @@ impl ArchiveMetadata {
         ArchiveMetadata(__target)
     }
     pub fn format(&self) -> String {
-        serde_json::to_string(&self.0.format).unwrap_or_default()
+        self.0.format.to_string()
     }
     pub fn file_count(&self) -> usize {
         ::serde_json::to_value(&self.0.file_count)
@@ -7616,7 +7616,7 @@ impl HeaderMetadata {
             .unwrap_or_default()
     }
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
     pub fn id(&self) -> Option<String> {
         self.0.id.clone()
@@ -7638,10 +7638,10 @@ impl HeaderMetadata {
 pub struct LinkMetadata(pub kreuzberg::LinkMetadata);
 impl LinkMetadata {
     pub fn href(&self) -> String {
-        serde_json::to_string(&self.0.href).unwrap_or_default()
+        self.0.href.clone()
     }
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
     pub fn title(&self) -> Option<String> {
         self.0.title.clone()
@@ -7666,7 +7666,7 @@ impl LinkMetadata {
 pub struct ImageMetadataType(pub kreuzberg::ImageMetadataType);
 impl ImageMetadataType {
     pub fn src(&self) -> String {
-        serde_json::to_string(&self.0.src).unwrap_or_default()
+        self.0.src.clone()
     }
     pub fn alt(&self) -> Option<String> {
         self.0.alt.clone()
@@ -7698,7 +7698,7 @@ impl StructuredData {
         StructuredDataType::from(self.0.data_type.clone())
     }
     pub fn raw_json(&self) -> String {
-        serde_json::to_string(&self.0.raw_json).unwrap_or_default()
+        self.0.raw_json.clone()
     }
     pub fn schema_type(&self) -> Option<String> {
         self.0.schema_type.clone()
@@ -7880,7 +7880,7 @@ impl OcrMetadata {
         OcrMetadata(__target)
     }
     pub fn language(&self) -> String {
-        serde_json::to_string(&self.0.language).unwrap_or_default()
+        self.0.language.clone()
     }
     pub fn psm(&self) -> i32 {
         ::serde_json::to_value(&self.0.psm)
@@ -7889,7 +7889,7 @@ impl OcrMetadata {
             .unwrap_or_default()
     }
     pub fn output_format(&self) -> String {
-        serde_json::to_string(&self.0.output_format).unwrap_or_default()
+        self.0.output_format.clone()
     }
     pub fn table_count(&self) -> usize {
         ::serde_json::to_value(&self.0.table_count)
@@ -7916,10 +7916,10 @@ impl OcrMetadata {
 pub struct ErrorMetadata(pub kreuzberg::ErrorMetadata);
 impl ErrorMetadata {
     pub fn error_type(&self) -> String {
-        serde_json::to_string(&self.0.error_type).unwrap_or_default()
+        self.0.error_type.clone()
     }
     pub fn message(&self) -> String {
-        serde_json::to_string(&self.0.message).unwrap_or_default()
+        self.0.message.clone()
     }
 }
 
@@ -8280,10 +8280,10 @@ impl DbfMetadata {
 pub struct DbfFieldInfo(pub kreuzberg::DbfFieldInfo);
 impl DbfFieldInfo {
     pub fn name(&self) -> String {
-        serde_json::to_string(&self.0.name).unwrap_or_default()
+        self.0.name.clone()
     }
     pub fn field_type(&self) -> String {
-        serde_json::to_string(&self.0.field_type).unwrap_or_default()
+        self.0.field_type.clone()
     }
 }
 
@@ -8339,7 +8339,7 @@ impl JatsMetadata {
 pub struct ContributorRole(pub kreuzberg::ContributorRole);
 impl ContributorRole {
     pub fn name(&self) -> String {
-        serde_json::to_string(&self.0.name).unwrap_or_default()
+        self.0.name.clone()
     }
     pub fn role(&self) -> Option<String> {
         self.0.role.clone()
@@ -8516,7 +8516,7 @@ impl OcrElement {
         OcrElement(__target)
     }
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
     pub fn geometry(&self) -> OcrBoundingGeometry {
         OcrBoundingGeometry::from(self.0.geometry.clone())
@@ -8692,7 +8692,7 @@ impl PageContent {
             .unwrap_or_default()
     }
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn tables(&self) -> Vec<Table> {
         self.0.tables.iter().map(|elem| Table((**elem).clone())).collect()
@@ -8741,7 +8741,7 @@ impl LayoutRegion {
         LayoutRegion(__target)
     }
     pub fn class_name(&self) -> String {
-        serde_json::to_string(&self.0.class_name).unwrap_or_default()
+        self.0.class_name.clone()
     }
     pub fn confidence(&self) -> f64 {
         ::serde_json::to_value(&self.0.confidence)
@@ -8780,7 +8780,7 @@ impl PageHierarchy {
 pub struct HierarchicalBlock(pub kreuzberg::HierarchicalBlock);
 impl HierarchicalBlock {
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
     pub fn font_size(&self) -> f32 {
         ::serde_json::to_value(&self.0.font_size)
@@ -8789,7 +8789,7 @@ impl HierarchicalBlock {
             .unwrap_or_default()
     }
     pub fn level(&self) -> String {
-        serde_json::to_string(&self.0.level).unwrap_or_default()
+        self.0.level.clone()
     }
     pub fn bbox(&self) -> Option<Vec<f32>> {
         self.0.bbox.as_ref().and_then(|v| {
@@ -8828,7 +8828,7 @@ impl Table {
         serde_json::to_string(&self.0.cells).expect("serializable cells")
     }
     pub fn markdown(&self) -> String {
-        serde_json::to_string(&self.0.markdown).unwrap_or_default()
+        self.0.markdown.clone()
     }
     pub fn page_number(&self) -> usize {
         ::serde_json::to_value(&self.0.page_number)
@@ -8856,7 +8856,7 @@ impl TableCell {
         TableCell(__target)
     }
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn row_span(&self) -> usize {
         ::serde_json::to_value(&self.0.row_span)
@@ -8881,7 +8881,7 @@ impl TableCell {
 pub struct Uri(pub kreuzberg::Uri);
 impl Uri {
     pub fn url(&self) -> String {
-        serde_json::to_string(&self.0.url).unwrap_or_default()
+        self.0.url.clone()
     }
     pub fn label(&self) -> Option<String> {
         self.0.label.clone()
@@ -8909,7 +8909,7 @@ pub struct ApiDoc(pub kreuzberg::api::openapi::ApiDoc);
 pub struct InfoResponse(pub kreuzberg::api::InfoResponse);
 impl InfoResponse {
     pub fn version(&self) -> String {
-        serde_json::to_string(&self.0.version).unwrap_or_default()
+        self.0.version.clone()
     }
     pub fn rust_backend(&self) -> bool {
         ::serde_json::to_value(&self.0.rust_backend)
@@ -8940,7 +8940,7 @@ impl EmbedResponse {
         serde_json::to_string(&self.0.embeddings).expect("serializable embeddings")
     }
     pub fn model(&self) -> String {
-        serde_json::to_string(&self.0.model).unwrap_or_default()
+        self.0.model.clone()
     }
     pub fn dimensions(&self) -> usize {
         ::serde_json::to_value(&self.0.dimensions)
@@ -8959,13 +8959,13 @@ impl EmbedResponse {
 pub struct ChunkRequest(pub kreuzberg::api::ChunkRequest);
 impl ChunkRequest {
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
     pub fn config(&self) -> Option<String> {
         self.0.config.as_ref().and_then(|v| serde_json::to_string(v).ok())
     }
     pub fn chunker_type(&self) -> String {
-        serde_json::to_string(&self.0.chunker_type).unwrap_or_default()
+        self.0.chunker_type.clone()
     }
 }
 
@@ -8993,14 +8993,14 @@ impl ChunkResponse {
             .unwrap_or_default()
     }
     pub fn chunker_type(&self) -> String {
-        serde_json::to_string(&self.0.chunker_type).unwrap_or_default()
+        self.0.chunker_type.clone()
     }
 }
 
 pub struct DetectResponse(pub kreuzberg::api::DetectResponse);
 impl DetectResponse {
     pub fn mime_type(&self) -> String {
-        serde_json::to_string(&self.0.mime_type).unwrap_or_default()
+        self.0.mime_type.clone()
     }
     pub fn filename(&self) -> Option<String> {
         self.0.filename.clone()
@@ -9010,10 +9010,10 @@ impl DetectResponse {
 pub struct ManifestEntryResponse(pub kreuzberg::api::ManifestEntryResponse);
 impl ManifestEntryResponse {
     pub fn relative_path(&self) -> String {
-        serde_json::to_string(&self.0.relative_path).unwrap_or_default()
+        self.0.relative_path.clone()
     }
     pub fn sha256(&self) -> String {
-        serde_json::to_string(&self.0.sha256).unwrap_or_default()
+        self.0.sha256.clone()
     }
     pub fn size_bytes(&self) -> u64 {
         ::serde_json::to_value(&self.0.size_bytes)
@@ -9022,14 +9022,14 @@ impl ManifestEntryResponse {
             .unwrap_or_default()
     }
     pub fn source_url(&self) -> String {
-        serde_json::to_string(&self.0.source_url).unwrap_or_default()
+        self.0.source_url.clone()
     }
 }
 
 pub struct ManifestResponse(pub kreuzberg::api::ManifestResponse);
 impl ManifestResponse {
     pub fn kreuzberg_version(&self) -> String {
-        serde_json::to_string(&self.0.kreuzberg_version).unwrap_or_default()
+        self.0.kreuzberg_version.clone()
     }
     pub fn total_size_bytes(&self) -> u64 {
         ::serde_json::to_value(&self.0.total_size_bytes)
@@ -9055,7 +9055,7 @@ impl ManifestResponse {
 pub struct WarmResponse(pub kreuzberg::api::WarmResponse);
 impl WarmResponse {
     pub fn cache_dir(&self) -> String {
-        serde_json::to_string(&self.0.cache_dir).unwrap_or_default()
+        self.0.cache_dir.clone()
     }
     pub fn downloaded(&self) -> Vec<String> {
         ::serde_json::to_value(&self.0.downloaded)
@@ -9077,17 +9077,17 @@ impl StructuredExtractionResponse {
         serde_json::to_string(&self.0.structured_output).unwrap_or_default()
     }
     pub fn content(&self) -> String {
-        serde_json::to_string(&self.0.content).unwrap_or_default()
+        self.0.content.clone()
     }
     pub fn mime_type(&self) -> String {
-        serde_json::to_string(&self.0.mime_type).unwrap_or_default()
+        self.0.mime_type.clone()
     }
 }
 
 pub struct OpenWebDocumentResponse(pub kreuzberg::api::OpenWebDocumentResponse);
 impl OpenWebDocumentResponse {
     pub fn page_content(&self) -> String {
-        serde_json::to_string(&self.0.page_content).unwrap_or_default()
+        self.0.page_content.clone()
     }
     pub fn metadata(&self) -> String {
         serde_json::to_string(&self.0.metadata).unwrap_or_default()
@@ -9100,14 +9100,14 @@ impl DoclingCompatResponse {
         serde_json::to_string(&self.0.document).unwrap_or_default()
     }
     pub fn status(&self) -> String {
-        serde_json::to_string(&self.0.status).unwrap_or_default()
+        self.0.status.clone()
     }
 }
 
 pub struct DetectMimeTypeParams(pub kreuzberg::mcp::DetectMimeTypeParams);
 impl DetectMimeTypeParams {
     pub fn path(&self) -> String {
-        serde_json::to_string(&self.0.path).unwrap_or_default()
+        self.0.path.clone()
     }
     pub fn use_content(&self) -> bool {
         ::serde_json::to_value(&self.0.use_content)
@@ -9155,16 +9155,16 @@ impl EmbedTextParams {
 pub struct ExtractStructuredParams(pub kreuzberg::mcp::ExtractStructuredParams);
 impl ExtractStructuredParams {
     pub fn path(&self) -> String {
-        serde_json::to_string(&self.0.path).unwrap_or_default()
+        self.0.path.clone()
     }
     pub fn schema(&self) -> String {
         serde_json::to_string(&self.0.schema).unwrap_or_default()
     }
     pub fn model(&self) -> String {
-        serde_json::to_string(&self.0.model).unwrap_or_default()
+        self.0.model.clone()
     }
     pub fn schema_name(&self) -> String {
-        serde_json::to_string(&self.0.schema_name).unwrap_or_default()
+        self.0.schema_name.clone()
     }
     pub fn schema_description(&self) -> Option<String> {
         self.0.schema_description.clone()
@@ -9186,7 +9186,7 @@ impl ExtractStructuredParams {
 pub struct ChunkTextParams(pub kreuzberg::mcp::ChunkTextParams);
 impl ChunkTextParams {
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
     pub fn max_characters(&self) -> Option<usize> {
         self.0.max_characters.as_ref().and_then(|v| {
@@ -9259,7 +9259,7 @@ impl MergedChunk {
 pub struct EmbeddingPreset(pub kreuzberg::EmbeddingPreset);
 impl EmbeddingPreset {
     pub fn name(&self) -> String {
-        serde_json::to_string(&self.0.name).unwrap_or_default()
+        self.0.name.clone()
     }
     pub fn chunk_size(&self) -> usize {
         ::serde_json::to_value(&self.0.chunk_size)
@@ -9274,13 +9274,13 @@ impl EmbeddingPreset {
             .unwrap_or_default()
     }
     pub fn model_repo(&self) -> String {
-        serde_json::to_string(&self.0.model_repo).unwrap_or_default()
+        self.0.model_repo.clone()
     }
     pub fn pooling(&self) -> String {
-        serde_json::to_string(&self.0.pooling).unwrap_or_default()
+        self.0.pooling.clone()
     }
     pub fn model_file(&self) -> String {
-        serde_json::to_string(&self.0.model_file).unwrap_or_default()
+        self.0.model_file.clone()
     }
     pub fn dimensions(&self) -> usize {
         ::serde_json::to_value(&self.0.dimensions)
@@ -9289,7 +9289,7 @@ impl EmbeddingPreset {
             .unwrap_or_default()
     }
     pub fn description(&self) -> String {
-        serde_json::to_string(&self.0.description).unwrap_or_default()
+        self.0.description.clone()
     }
 }
 
@@ -9400,7 +9400,7 @@ impl KeywordConfig {
 pub struct Keyword(pub kreuzberg::Keyword);
 impl Keyword {
     pub fn text(&self) -> String {
-        serde_json::to_string(&self.0.text).unwrap_or_default()
+        self.0.text.clone()
     }
     pub fn score(&self) -> f32 {
         ::serde_json::to_value(&self.0.score)
@@ -9445,7 +9445,7 @@ impl RecognizedTable {
         serde_json::to_string(&self.0.cells).expect("serializable cells")
     }
     pub fn markdown(&self) -> String {
-        serde_json::to_string(&self.0.markdown).unwrap_or_default()
+        self.0.markdown.clone()
     }
 }
 
@@ -9497,7 +9497,7 @@ impl PaddleOcrConfig {
         PaddleOcrConfig(__target)
     }
     pub fn language(&self) -> String {
-        serde_json::to_string(&self.0.language).unwrap_or_default()
+        self.0.language.clone()
     }
     pub fn cache_dir(&self) -> Option<String> {
         self.0.cache_dir.as_ref().and_then(|v| serde_json::to_string(v).ok())
@@ -9557,7 +9557,7 @@ impl PaddleOcrConfig {
             .unwrap_or_default()
     }
     pub fn model_tier(&self) -> String {
-        serde_json::to_string(&self.0.model_tier).unwrap_or_default()
+        self.0.model_tier.clone()
     }
 }
 
