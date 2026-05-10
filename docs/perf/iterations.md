@@ -24,11 +24,24 @@ Per-iteration tracker for kreuzberg perf optimization rounds. Append one row per
 
 ## Queue (next session)
 
-The following candidates are pending the first flamegraph round (P1.3 in the active plan). Each must be flamegraph-confirmed as a top-15 self-time hotspot before being implemented.
+The following candidates are pending the first flamegraph round. Each must be flamegraph-confirmed as a top-15 self-time hotspot before being implemented.
 
 1. **`pdf::structure::pipeline::fuse_paragraphs`** — known to do per-paragraph clones; verify it's still in the top-15 after the layout-hints fix shifted the call graph.
 2. **`rendering::markdown` escape passes** — six successive `.replace()` calls always allocate; candidate for `Cow::Borrowed` until needle found.
 3. **`pdf::structure::text_repair::*`** — `split_whitespace` byte iteration; potential `memchr` win.
+
+### Blocker for the queue
+
+A first attempt at flamegraph generation produced `flamegraphs/61170f7f6/baseline.svg` (~466KB, 2218 stack rectangles), but only system symbols (`__mh_execute_header`, `__os_lock_handoff_lock_slow`, raw addresses) are resolved. The kreuzberg crate's symbols are stripped by the default release profile.
+
+**Next session must:**
+
+1. Rebuild with `cargo build --profile profiling -p kreuzberg-cli --features full` (the `profiling` profile inherits `release` but keeps debug info per `feature-flag-policy` in CLAUDE.md).
+2. Rebuild `benchmark-harness` with `--features profiling --profile profiling`.
+3. Re-run `pipeline-benchmark --profile-dir flamegraphs/<sha>/`.
+4. Re-extract the top-15 from the resulting SVG; confirm or reorder the queue above.
+
+Until that lands, the three candidates listed are *intuition-confirmed only* (from prior code review); they must NOT be implemented until they're flamegraph-confirmed. This is the rule the prior `split_embedded` REJECT was designed to enforce.
 
 ## Stopping conditions
 

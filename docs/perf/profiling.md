@@ -9,8 +9,29 @@ Reproducible flamegraph-driven workflow for kreuzberg PDF performance work. The 
 ## Generate a flamegraph
 
 ```bash
+# 1. Build with debug symbols. The default release profile strips them,
+#    so the flamegraph fills with raw addresses and `__mh_execute_header`.
+cargo build --profile profiling -p kreuzberg-cli --features full
+cargo build --profile profiling -p benchmark-harness --features profiling
+
+# 2. Run the harness with --profile-dir (note: pipeline-benchmark, not compare).
+SHA=$(git rev-parse --short HEAD)
+mkdir -p flamegraphs/$SHA
+target/profiling/benchmark-harness pipeline-benchmark \
+  --fixtures tools/benchmark-harness/fixtures \
+  --paths baseline \
+  --doc pdf \
+  --profile-dir flamegraphs/$SHA \
+  --json-output bench/profile-baseline-$SHA.json
+```
+
+The Taskfile wrapper:
+
+```bash
 task benchmark:profile FRAMEWORK=kreuzberg PIPELINE=baseline OUTPUT_FORMAT=plaintext MODE=batch
 ```
+
+…**works for the SF1 portion** but currently builds `--release` not `--profile profiling`, so the resulting SVGs only have system-symbol resolution. Until the task definition is fixed, drive flamegraph generation manually with the explicit commands above. (Tracked as a follow-up; don't optimize against a release-stripped flamegraph.)
 
 What this does:
 
