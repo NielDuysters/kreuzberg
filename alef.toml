@@ -208,6 +208,9 @@ exclude_types = [
 [crates.ruby]
 gem_name = "kreuzberg"
 
+[crates.ruby.stubs]
+output = "packages/ruby/sig/"
+
 [crates.php]
 extension_name = "kreuzberg"
 exclude_types = [
