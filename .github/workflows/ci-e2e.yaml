@@ -253,7 +253,7 @@ jobs:
         if: matrix.lang == 'kotlin_android'
         uses: kreuzberg-dev/actions/setup-gradle@v1.0.0
         with:
-          gradle-version: "9.0"
+          gradle-version: "9.1.0"
 
       - name: Setup .NET
         if: matrix.dotnet-version
