@@ -38,5 +38,5 @@ enum class ChunkerType {
     TEXT,
     MARKDOWN,
     YAML,
-    SEMANTIC
+    SEMANTIC;
 }

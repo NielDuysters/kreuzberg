@@ -33,5 +33,5 @@ enum class StructuredDataType {
     /**
      * RDFa
      */
-    R_D_FA
+    R_D_FA;
 }

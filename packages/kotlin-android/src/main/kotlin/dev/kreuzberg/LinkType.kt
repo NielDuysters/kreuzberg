@@ -45,5 +45,5 @@ enum class LinkType {
     /**
      * Other link type
      */
-    OTHER
+    OTHER;
 }

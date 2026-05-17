@@ -87,5 +87,5 @@ enum class PaddleLanguage {
     /**
      * Telugu
      */
-    TELUGU
+    TELUGU;
 }

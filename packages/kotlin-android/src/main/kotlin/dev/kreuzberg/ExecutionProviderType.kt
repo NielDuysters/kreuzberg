@@ -44,5 +44,5 @@ enum class ExecutionProviderType {
     /**
      * NVIDIA TensorRT (optimized CUDA inference).
      */
-    TENSOR_RT
+    TENSOR_RT;
 }

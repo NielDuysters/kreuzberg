@@ -37,5 +37,5 @@ enum class OcrBackendType {
     /**
      * Custom/third-party OCR backend
      */
-    CUSTOM
+    CUSTOM;
 }

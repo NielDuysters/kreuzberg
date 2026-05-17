@@ -37,5 +37,5 @@ enum class ListType {
     /**
      * Indented items
      */
-    INDENTED
+    INDENTED;
 }

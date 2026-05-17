@@ -50,5 +50,5 @@ enum class TableModel {
     /**
      * Disable table structure model inference entirely; use heuristic path only.
      */
-    DISABLED
+    DISABLED;
 }

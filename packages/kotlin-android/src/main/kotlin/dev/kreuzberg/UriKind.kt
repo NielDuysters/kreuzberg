@@ -45,5 +45,5 @@ enum class UriKind {
     /**
      * An email address (`mailto:` link or bare email).
      */
-    EMAIL
+    EMAIL;
 }

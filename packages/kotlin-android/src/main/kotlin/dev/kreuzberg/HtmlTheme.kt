@@ -44,5 +44,5 @@ enum class HtmlTheme {
      * No built-in stylesheet emitted. CSS custom properties are still defined
      * on `:root` so user stylesheets can reference `var(--kb-*)` tokens.
      */
-    UNSTYLED
+    UNSTYLED;
 }

@@ -77,5 +77,5 @@ enum class ChunkType {
     /**
      * Unclassified or mixed content.
      */
-    UNKNOWN
+    UNKNOWN;
 }

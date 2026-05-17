@@ -54,5 +54,5 @@ enum class ProcessingStage {
      * - Final validation
      * - Output formatting
      */
-    LATE
+    LATE;
 }

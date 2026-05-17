@@ -29,5 +29,5 @@ enum class KeywordAlgorithm {
     /**
      * RAKE (Rapid Automatic Keyword Extraction) - co-occurrence based
      */
-    RAKE
+    RAKE;
 }

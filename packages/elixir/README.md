@@ -76,6 +76,7 @@ Extract text, tables, images, and metadata from 91+ file formats and 248 program
 
 ### Package Installation
 
+
 Add to your `mix.exs` dependencies:
 
 ```elixir
@@ -92,6 +93,7 @@ Then run:
 mix deps.get
 ```
 
+
 ### System Requirements
 
 - **Elixir 1.14+** and **Erlang/OTP 26+** required
@@ -99,13 +101,14 @@ mix deps.get
 - Optional: [ONNX Runtime](https://github.com/microsoft/onnxruntime/releases) version 1.22.x for embeddings support
 - Optional: [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) for OCR functionality
 
+
 ## Quick Start
 
 ### Basic Extraction
 
 Extract text, metadata, and structure from any supported document format:
 
-````exs
+```exs
 ```elixir title="Elixir"
 # Basic document extraction workflow
 # Load file -> extract -> access results
@@ -118,9 +121,8 @@ IO.puts(result.content)
 IO.puts("\nMetadata:")
 IO.puts("Format: #{inspect(result.metadata.format)}")
 IO.puts("Tables found: #{length(result.tables)}")
-````
-
-````
+```
+```
 
 ### Common Use Cases
 
@@ -145,9 +147,8 @@ content = result.content
 IO.puts("OCR Extracted content:")
 IO.puts(content)
 IO.puts("Metadata: #{inspect(result.metadata)}")
-````
-
-````
+```
+```
 
 
 #### Table Extraction
@@ -173,9 +174,8 @@ Enum.each(results, fn result ->
 end)
 
 IO.puts("Total files processed: #{length(results)}")
-````
-
-````
+```
+```
 
 
 #### Async Processing
@@ -195,9 +195,8 @@ case Kreuzberg.extract_file("document.pdf") do
   {:error, reason} ->
     IO.puts("Extraction failed: #{inspect(reason)}")
 end
-````
-
-````
+```
+```
 
 
 ### Next Steps
@@ -334,9 +333,8 @@ content = result.content
 IO.puts("OCR Extracted content:")
 IO.puts(content)
 IO.puts("Metadata: #{inspect(result.metadata)}")
-````
-
-````
+```
+```
 
 
 ## Async Support
@@ -356,9 +354,8 @@ case Kreuzberg.extract_file("document.pdf") do
   {:error, reason} ->
     IO.puts("Extraction failed: #{inspect(reason)}")
 end
-````
-
-````
+```
+```
 
 
 ## Plugin System
@@ -447,9 +444,8 @@ end
 # List all registered post-processors
 {:ok, processors} = Plugin.list_post_processors()
 IO.inspect(processors, label: "Registered Post-Processors")
-````
-
-````
+```
+```
 
 
 ## Embeddings Support
@@ -477,8 +473,7 @@ Enum.each(results, fn result ->
 end)
 
 IO.puts("Total files processed: #{length(results)}")
-````
-
+```
 ```
 
 
@@ -517,4 +512,3 @@ Elastic-2.0 License — see [LICENSE](../../LICENSE) for details.
 - **Discord Community**: [Join our Discord](https://discord.gg/xt9WY3GnKR)
 - **GitHub Issues**: [Report bugs](https://github.com/kreuzberg-dev/kreuzberg/issues)
 - **Discussions**: [Ask questions](https://github.com/kreuzberg-dev/kreuzberg/discussions)
-```

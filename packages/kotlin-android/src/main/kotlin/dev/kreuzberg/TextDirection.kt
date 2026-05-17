@@ -33,5 +33,5 @@ enum class TextDirection {
     /**
      * Automatic text direction detection
      */
-    AUTO
+    AUTO;
 }

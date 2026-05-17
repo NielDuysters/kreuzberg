@@ -33,5 +33,5 @@ enum class ResultFormat {
     /**
      * Element-based format with semantic element extraction
      */
-    ELEMENT_BASED
+    ELEMENT_BASED;
 }

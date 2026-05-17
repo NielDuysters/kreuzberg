@@ -364,7 +364,6 @@ object Kreuzberg {
      * Returns `KreuzbergError.UnsupportedFormat` if MIME type cannot be determined.
      */
     fun detectMimeTypeFromBytes(content: String): String = KreuzbergBridge.nativeDetectMimeTypeFromBytes(content)
-
     /**
      * Get file extensions for a given MIME type.
      *
@@ -566,14 +565,7 @@ object Kreuzberg {
      * Returns `KreuzbergError.Parsing` if the PDF cannot be opened, authenticated,
      * or rendered, or if `page_index` is out of range.
      */
-    fun renderPdfPageToPng(pdfBytes: String, pageIndex: Long, dpi: Int? = null, password: String? = null): Long =
-        KreuzbergBridge.nativeRenderPdfPageToPng(
-            pdfBytes,
-            pageIndex,
-        dpi ?: 0,
-            password ?: ""
-        )
-
+    fun renderPdfPageToPng(pdfBytes: String, pageIndex: Long, dpi: Int? = null, password: String? = null): Long = KreuzbergBridge.nativeRenderPdfPageToPng(pdfBytes, pageIndex, dpi ?: 0, password ?: "")
     /**
      * Detect the MIME type of a file at the given path.
      *
@@ -581,7 +573,6 @@ object Kreuzberg {
      * Set `check_exists` to `true` to verify the file exists before detection.
      */
     fun detectMimeType(path: String, checkExists: Boolean): String = KreuzbergBridge.nativeDetectMimeType(path, checkExists)
-
     /**
      * Embed a list of texts using the configured embedding model.
      *
@@ -607,7 +598,6 @@ object Kreuzberg {
      * clone so the value is safe to pass across FFI boundaries.
      */
     fun getEmbeddingPreset(name: String): String? = KreuzbergBridge.nativeGetEmbeddingPreset(name)
-
     /**
      * List the names of all available embedding presets.
      *
@@ -625,4 +615,5 @@ object Kreuzberg {
      */
     suspend fun listEmbeddingPresetsAsync(): List<String> =
         withContext(Dispatchers.IO) { listEmbeddingPresets() }
+
 }

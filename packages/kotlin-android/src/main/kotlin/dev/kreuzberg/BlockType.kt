@@ -37,5 +37,5 @@ enum class BlockType {
     SECTION,
     THEMATIC_BREAK,
     RAW_BLOCK,
-    MATH_DISPLAY
+    MATH_DISPLAY;
 }

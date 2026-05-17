@@ -68,5 +68,5 @@ enum class ElementType {
     /**
      * Header text
      */
-    HEADER
+    HEADER;
 }

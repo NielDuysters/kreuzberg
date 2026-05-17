@@ -49,5 +49,5 @@ enum class PdfAnnotationType {
     /**
      * Any other annotation type
      */
-    OTHER
+    OTHER;
 }

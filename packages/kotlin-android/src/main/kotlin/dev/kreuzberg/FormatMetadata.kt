@@ -32,115 +32,96 @@ sealed class FormatMetadata {
     data class Pdf(
         val metadata: PdfMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Docx(
         val metadata: DocxMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Excel(
         val metadata: ExcelMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Email(
         val metadata: EmailMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Pptx(
         val metadata: PptxMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Archive(
         val metadata: ArchiveMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Image(
         val metadata: ImageMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Xml(
         val metadata: XmlMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Text(
         val metadata: TextMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Html(
         val metadata: HtmlMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Ocr(
         val metadata: OcrMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Csv(
         val metadata: CsvMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Bibtex(
         val metadata: BibtexMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Citation(
         val metadata: CitationMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class FictionBook(
         val metadata: FictionBookMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Dbf(
         val metadata: DbfMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Jats(
         val metadata: JatsMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Epub(
         val metadata: EpubMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Pst(
         val metadata: PstMetadata
     ) : FormatMetadata()
-
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize
     @com.fasterxml.jackson.databind.annotation.JsonSerialize
     data class Code(
@@ -148,9 +129,7 @@ sealed class FormatMetadata {
     ) : FormatMetadata()
 }
 
-private class FormatMetadataDeserializer : com.fasterxml.jackson.databind.deser.std.StdDeserializer<FormatMetadata>(
-    FormatMetadata::class.java
-) {
+private class FormatMetadataDeserializer : com.fasterxml.jackson.databind.deser.std.StdDeserializer<FormatMetadata>(FormatMetadata::class.java) {
     @Suppress("LongMethod")
     override fun deserialize(
         parser: com.fasterxml.jackson.core.JsonParser,
@@ -182,10 +161,7 @@ private class FormatMetadataDeserializer : com.fasterxml.jackson.databind.deser.
             "pst" -> FormatMetadata.Pst(ctx.readTreeAsValue<PstMetadata>(payload, PstMetadata::class.java))
             "code" -> FormatMetadata.Code(ctx.readTreeAsValue<String>(payload, String::class.java))
             else -> throw com.fasterxml.jackson.databind.exc.InvalidFormatException(
-                parser,
-                "Unknown FormatMetadata tag",
-                tag,
-                FormatMetadata::class.java,
+                parser, "Unknown FormatMetadata tag", tag, FormatMetadata::class.java,
             )
         }
     }
@@ -199,188 +175,125 @@ private class FormatMetadataSerializer : com.fasterxml.jackson.databind.ser.std.
         provider: com.fasterxml.jackson.databind.SerializerProvider,
     ) {
         @Suppress("UNCHECKED_CAST")
-        val mapper =
-            (gen.codec as? com.fasterxml.jackson.databind.ObjectMapper)
-                ?: com.fasterxml.jackson.databind.ObjectMapper().findAndRegisterModules()
-        val node: com.fasterxml.jackson.databind.node.ObjectNode =
-            when (value) {
+        val mapper = (gen.codec as? com.fasterxml.jackson.databind.ObjectMapper) ?: com.fasterxml.jackson.databind.ObjectMapper().findAndRegisterModules()
+        val node: com.fasterxml.jackson.databind.node.ObjectNode = when (value) {
             is FormatMetadata.Pdf -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "pdf")
                 n
             }
             is FormatMetadata.Docx -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "docx")
                 n
             }
             is FormatMetadata.Excel -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "excel")
                 n
             }
             is FormatMetadata.Email -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "email")
                 n
             }
             is FormatMetadata.Pptx -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "pptx")
                 n
             }
             is FormatMetadata.Archive -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "archive")
                 n
             }
             is FormatMetadata.Image -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "image")
                 n
             }
             is FormatMetadata.Xml -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "xml")
                 n
             }
             is FormatMetadata.Text -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "text")
                 n
             }
             is FormatMetadata.Html -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "html")
                 n
             }
             is FormatMetadata.Ocr -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "ocr")
                 n
             }
             is FormatMetadata.Csv -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "csv")
                 n
             }
             is FormatMetadata.Bibtex -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "bibtex")
                 n
             }
             is FormatMetadata.Citation -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "citation")
                 n
             }
             is FormatMetadata.FictionBook -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "fiction_book")
                 n
             }
             is FormatMetadata.Dbf -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "dbf")
                 n
             }
             is FormatMetadata.Jats -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "jats")
                 n
             }
             is FormatMetadata.Epub -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "epub")
                 n
             }
             is FormatMetadata.Pst -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.metadata
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.metadata) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "pst")
                 n
             }
             is FormatMetadata.Code -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value.value
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value.value) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("format_type", "code")
                 n
             }

@@ -35,5 +35,5 @@ enum class PageUnitType {
     /**
      * Spreadsheet sheets (XLSX, ODS)
      */
-    SHEET
+    SHEET;
 }

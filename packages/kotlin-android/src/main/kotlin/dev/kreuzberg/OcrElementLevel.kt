@@ -40,5 +40,5 @@ enum class OcrElementLevel {
     /**
      * Page-level element
      */
-    PAGE
+    PAGE;
 }

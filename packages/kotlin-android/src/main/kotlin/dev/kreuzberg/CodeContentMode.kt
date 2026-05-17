@@ -36,5 +36,5 @@ enum class CodeContentMode {
     /**
      * Emit function/class headings + docstrings (no code bodies).
      */
-    STRUCTURE
+    STRUCTURE;
 }

@@ -37,5 +37,5 @@ enum class ImageType {
     /**
      * Relative path image
      */
-    RELATIVE
+    RELATIVE;
 }

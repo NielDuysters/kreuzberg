@@ -37,5 +37,5 @@ enum class InlineType {
     MATH,
     RAW_INLINE,
     FOOTNOTE_REF,
-    SYMBOL
+    SYMBOL;
 }

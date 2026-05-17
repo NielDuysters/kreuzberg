@@ -49,5 +49,5 @@ enum class RelationshipKind {
     /**
      * Cross-reference (LaTeX `\ref{}`, DOCX cross-reference field).
      */
-    CROSS_REFERENCE
+    CROSS_REFERENCE;
 }

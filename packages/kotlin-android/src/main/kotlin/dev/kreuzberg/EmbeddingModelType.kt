@@ -32,7 +32,6 @@ sealed class EmbeddingModelType {
     data class Preset(
         val name: String
     ) : EmbeddingModelType()
-
     /**
      * Use a custom ONNX model from HuggingFace
      */
@@ -42,7 +41,6 @@ sealed class EmbeddingModelType {
         val modelId: String,
         val dimensions: Long
     ) : EmbeddingModelType()
-
     /**
      * Provider-hosted embedding model via liter-llm.
      *
@@ -54,7 +52,6 @@ sealed class EmbeddingModelType {
     data class Llm(
         val llm: LlmConfig
     ) : EmbeddingModelType()
-
     /**
      * In-process embedding backend registered via the plugin system.
      *
@@ -83,9 +80,7 @@ sealed class EmbeddingModelType {
     ) : EmbeddingModelType()
 }
 
-private class EmbeddingModelTypeDeserializer : com.fasterxml.jackson.databind.deser.std.StdDeserializer<EmbeddingModelType>(
-    EmbeddingModelType::class.java
-) {
+private class EmbeddingModelTypeDeserializer : com.fasterxml.jackson.databind.deser.std.StdDeserializer<EmbeddingModelType>(EmbeddingModelType::class.java) {
     @Suppress("LongMethod")
     override fun deserialize(
         parser: com.fasterxml.jackson.core.JsonParser,
@@ -101,18 +96,13 @@ private class EmbeddingModelTypeDeserializer : com.fasterxml.jackson.databind.de
             "llm" -> ctx.readTreeAsValue<EmbeddingModelType.Llm>(payload, EmbeddingModelType.Llm::class.java)
             "plugin" -> ctx.readTreeAsValue<EmbeddingModelType.Plugin>(payload, EmbeddingModelType.Plugin::class.java)
             else -> throw com.fasterxml.jackson.databind.exc.InvalidFormatException(
-                parser,
-                "Unknown EmbeddingModelType tag",
-                tag,
-                EmbeddingModelType::class.java,
+                parser, "Unknown EmbeddingModelType tag", tag, EmbeddingModelType::class.java,
             )
         }
     }
 }
 
-private class EmbeddingModelTypeSerializer : com.fasterxml.jackson.databind.ser.std.StdSerializer<EmbeddingModelType>(
-    EmbeddingModelType::class.java
-) {
+private class EmbeddingModelTypeSerializer : com.fasterxml.jackson.databind.ser.std.StdSerializer<EmbeddingModelType>(EmbeddingModelType::class.java) {
     @Suppress("LongMethod")
     override fun serialize(
         value: EmbeddingModelType,
@@ -120,44 +110,29 @@ private class EmbeddingModelTypeSerializer : com.fasterxml.jackson.databind.ser.
         provider: com.fasterxml.jackson.databind.SerializerProvider,
     ) {
         @Suppress("UNCHECKED_CAST")
-        val mapper =
-            (gen.codec as? com.fasterxml.jackson.databind.ObjectMapper)
-                ?: com.fasterxml.jackson.databind.ObjectMapper().findAndRegisterModules()
-        val node: com.fasterxml.jackson.databind.node.ObjectNode =
-            when (value) {
+        val mapper = (gen.codec as? com.fasterxml.jackson.databind.ObjectMapper) ?: com.fasterxml.jackson.databind.ObjectMapper().findAndRegisterModules()
+        val node: com.fasterxml.jackson.databind.node.ObjectNode = when (value) {
             is EmbeddingModelType.Preset -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value as EmbeddingModelType.Preset
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value as EmbeddingModelType.Preset) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("type", "preset")
                 n
             }
             is EmbeddingModelType.Custom -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value as EmbeddingModelType.Custom
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value as EmbeddingModelType.Custom) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("type", "custom")
                 n
             }
             is EmbeddingModelType.Llm -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value as EmbeddingModelType.Llm
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value as EmbeddingModelType.Llm) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("type", "llm")
                 n
             }
             is EmbeddingModelType.Plugin -> {
                 @Suppress("UNCHECKED_CAST")
-                val n =
-                    mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(
-                    value as EmbeddingModelType.Plugin
-                ) as com.fasterxml.jackson.databind.node.ObjectNode
+                val n = mapper.valueToTree<com.fasterxml.jackson.databind.node.ObjectNode>(value as EmbeddingModelType.Plugin) as com.fasterxml.jackson.databind.node.ObjectNode
                 n.put("type", "plugin")
                 n
             }

@@ -39,5 +39,5 @@ enum class ContentLayer {
     /**
      * Footnote content.
      */
-    FOOTNOTE
+    FOOTNOTE;
 }

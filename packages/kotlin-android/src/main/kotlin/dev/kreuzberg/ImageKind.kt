@@ -65,5 +65,5 @@ enum class ImageKind {
     /**
      * Could not classify with reasonable confidence
      */
-    UNKNOWN
+    UNKNOWN;
 }
