@@ -90,6 +90,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and the canonical `CacheStats`**. alef ≥ v0.16.65 auto-excludes feature-gated
   types, so the explicit WASM exclusions for these are redundant.
 
+- **`task demo:dev:setup` for WASM demo prerequisites (#1007)**: new task
+  installs `wasm-pack` 0.13.1 (matches CI pin), `wasm-bindgen-cli` at the
+  version pinned in `Cargo.lock`, and WASI SDK 25 — all idempotent with exact
+  version checks and SHA256 verification on the WASI SDK download. Run once
+  before `task demo:dev`.
+
+### Fixed
+
+- **Cover-page lines dropped from `result.content` after consecutive-H1 merging (#966)**:
+  `merge_consecutive_h1s` extended `para.lines` when merging same-font-size H1
+  paragraphs but never updated `para.text`. Since `push_paragraph_element` prefers
+  `para.text` when non-empty (always true in production), all merged lines beyond
+  the first were silently discarded from `result.content` — for example, three of
+  four product model codes on a cover page would disappear entirely, making the
+  document invisible to retrieval queries against those variants. Fixed by (1)
+  keeping `para.text` in sync with `para.lines` after every merge, and (2) adding
+  a continuation guard that prevents distinct standalone headings (product model
+  codes such as `HR 22`, `HR 28/24`) from being merged in the first place. The
+  canonical split-title case (`KAISUN HOLDINGS` / `LIMITED`) continues to merge
+  correctly.
+
+- **`task demo:dev` broken after native WASM OCR migration (#1006)**: commit
+  `198c9e99e` removed the JS OCR worker bridge files without updating `demo.html`,
+  leaving the asset server with nothing to serve for the CDN imports. Restores
+  `dist/index.js`, `dist/extraction/files.js`, and `dist/ocr/enabler.js` for the
+  new architecture where `TesseractWasmBackend` auto-registers at WASM init time
+  and `enableOcr()` is a no-op.
+
 ## [5.0.0-rc.1] - 2026-05-16
 
 ### Changed
