@@ -84,9 +84,6 @@ object KreuzbergBridge {
     external fun nativeClearValidators()
 
     @Throws(KreuzbergBridgeException::class)
-    external fun nativeEmbedTextsAsync(texts: String, config: String): String
-
-    @Throws(KreuzbergBridgeException::class)
     external fun nativeRenderPdfPageToPng(pdfBytes: String, pageIndex: Long, dpi: Int, password: String): ByteArray
 
     @Throws(KreuzbergBridgeException::class)
@@ -110,16 +107,10 @@ object KreuzbergBridge {
     external fun nativeUnregisterOcrBackend(name: String)
 
     @Throws(KreuzbergBridgeException::class)
-    external fun nativeClearOcrBackends()
-
-    @Throws(KreuzbergBridgeException::class)
     external fun nativeRegisterPostProcessor(impl: dev.kreuzberg.IPostProcessor)
 
     @Throws(KreuzbergBridgeException::class)
     external fun nativeUnregisterPostProcessor(name: String)
-
-    @Throws(KreuzbergBridgeException::class)
-    external fun nativeClearPostProcessors()
 
     @Throws(KreuzbergBridgeException::class)
     external fun nativeRegisterValidator(impl: dev.kreuzberg.IValidator)
@@ -128,16 +119,10 @@ object KreuzbergBridge {
     external fun nativeUnregisterValidator(name: String)
 
     @Throws(KreuzbergBridgeException::class)
-    external fun nativeClearValidators()
-
-    @Throws(KreuzbergBridgeException::class)
     external fun nativeRegisterEmbeddingBackend(impl: dev.kreuzberg.IEmbeddingBackend)
 
     @Throws(KreuzbergBridgeException::class)
     external fun nativeUnregisterEmbeddingBackend(name: String)
-
-    @Throws(KreuzbergBridgeException::class)
-    external fun nativeClearEmbeddingBackends()
 
     @Throws(KreuzbergBridgeException::class)
     external fun nativeRegisterDocumentExtractor(impl: dev.kreuzberg.IDocumentExtractor)
@@ -146,14 +131,8 @@ object KreuzbergBridge {
     external fun nativeUnregisterDocumentExtractor(name: String)
 
     @Throws(KreuzbergBridgeException::class)
-    external fun nativeClearDocumentExtractors()
-
-    @Throws(KreuzbergBridgeException::class)
     external fun nativeRegisterRenderer(impl: dev.kreuzberg.IRenderer)
 
     @Throws(KreuzbergBridgeException::class)
     external fun nativeUnregisterRenderer(name: String)
-
-    @Throws(KreuzbergBridgeException::class)
-    external fun nativeClearRenderers()
 }

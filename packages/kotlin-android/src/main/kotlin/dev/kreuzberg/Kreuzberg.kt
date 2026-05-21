@@ -563,44 +563,6 @@ object Kreuzberg {
     /** Remove all registered validators. */
     fun clearValidators(): Unit = KreuzbergBridge.nativeClearValidators()
     /**
-     * Generate embeddings asynchronously for a list of text strings.
-     *
-     * This is the async counterpart to `embed_texts`. It offloads the blocking
-     * ONNX inference work to a dedicated blocking thread pool via Tokio's
-     * `spawn_blocking`, keeping the async executor free.
-     *
-     * Returns one embedding vector per input text in the same order.
-     *
-     * **Errors:**
-     *
-     * - `KreuzbergError.MissingDependency` if ONNX Runtime is not installed
-     * - `KreuzbergError.Embedding` if the preset name is unknown, model download fails,
-     *   or the blocking inference task panics
-     */
-    fun embedTextsAsync(texts: List<String>, config: EmbeddingConfig): List<List<Float>> {
-        val resultJson = KreuzbergBridge.nativeEmbedTextsAsync(mapper.writeValueAsString(texts), mapper.writeValueAsString(config))
-        return mapper.readValue(resultJson, object : TypeReference<List<List<Float>>>() {})
-    }
-
-    /**
-     * Generate embeddings asynchronously for a list of text strings.
-     *
-     * This is the async counterpart to `embed_texts`. It offloads the blocking
-     * ONNX inference work to a dedicated blocking thread pool via Tokio's
-     * `spawn_blocking`, keeping the async executor free.
-     *
-     * Returns one embedding vector per input text in the same order.
-     *
-     * **Errors:**
-     *
-     * - `KreuzbergError.MissingDependency` if ONNX Runtime is not installed
-     * - `KreuzbergError.Embedding` if the preset name is unknown, model download fails,
-     *   or the blocking inference task panics
-     */
-    suspend fun embedTextsAsyncAsync(texts: List<String>, config: EmbeddingConfig): List<List<Float>> =
-        withContext(Dispatchers.IO) { embedTextsAsync(texts, config) }
-
-    /**
      * Render a single PDF page to PNG bytes.
      *
      * Returns raw PNG-encoded bytes for the specified page at the given DPI.

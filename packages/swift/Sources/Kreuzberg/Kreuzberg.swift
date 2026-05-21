@@ -6756,6 +6756,10 @@ public func elementTypeFromJson(_ json: String) throws -> ElementType {
     return try JSONDecoder().decode(ElementType.self, from: data)
 }
 
+public func extractionConfigFromJson<GenericIntoRustString: RustBridge.IntoRustString>(_ json: GenericIntoRustString) throws -> ExtractionConfig {
+    return try RustBridge.extractionConfigFromJson(json)
+}
+
 public func formatMetadataFromJson(_ json: String) throws -> FormatMetadata {
     return try RustBridge.formatMetadataFromJson(json)
 }
