@@ -216,10 +216,13 @@ pub struct ExtractionResult {
     /// Populated when extracting source code files with the `tree-sitter` feature.
     /// Contains metrics, structural analysis, imports/exports, comments,
     /// docstrings, symbols, diagnostics, and optionally chunked code segments.
+    ///
+    /// Stored as an opaque JSON value so that all language bindings (Go, Java,
+    /// C#, …) can deserialize it as a raw JSON object rather than a typed struct.
+    /// The underlying type is `tree_sitter_language_pack::ProcessResult`.
     #[cfg(feature = "tree-sitter")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "api", schema(value_type = Option<serde_json::Value>))]
-    pub code_intelligence: Option<crate::ProcessResult>,
+    pub code_intelligence: Option<serde_json::Value>,
 
     /// LLM token usage and cost data for all LLM calls made during this extraction.
     ///
