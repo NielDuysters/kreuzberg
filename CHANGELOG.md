@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed (Zig e2e: all 88 tests passing)
+
+- **e2e/zig**: Bumped pinned `alef_version` to 0.17.17 and regenerated `e2e/zig/` against the upstream codegen fix that skips the `chunks_have_heading_context` synthetic assertion. Combined with pre-existing zig-specific overrides (`extract_file` and `extract_bytes` redirected to their `_sync` variants with JSON-struct result parsing, `render_pdf_page_to_png` extra `null, null` args for dpi/password, and FormatMetadata-as-display inline accessor on the `metadata.format` assertion), `task zig:e2e` now reports `Build Summary: 43/43 steps succeeded; 88/88 tests passed`. (`alef.toml`, `e2e/zig/`)
+
 ### Fixed (Go bindings: re-exported ProcessResult path)
 
 - **core**: Switched `ExtractionResult.code_intelligence` from `Option<tree_sitter_language_pack::ProcessResult>` to `Option<crate::ProcessResult>` so alef's type visitor resolves the re-exported name and emits the correct `*ProcessResult` Go binding type. Previously alef fell back to `*string`, producing `cannot unmarshal object into string` errors at runtime.

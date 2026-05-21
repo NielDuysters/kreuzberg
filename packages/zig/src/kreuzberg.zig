@@ -3188,12 +3188,6 @@ pub const ListType = enum {
     indented,
 };
 
-/// Whether the drawing is inline or anchored.
-pub const DrawingType = union(enum) {
-    inline_: void,
-    anchored: []const u8,
-};
-
 pub const FracType = enum {
     bar,
     no_bar,
