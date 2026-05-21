@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Taskfile**: `kotlin:e2e` now passes `--lang kotlin_android` to `alef test`, matching the language key declared in `alef.toml`. Previously the task invoked `alef test --e2e --lang kotlin` which produced `Language 'kotlin' not in config languages list or test configuration`. (`Taskfile.yml`)
+
 - **core**: `EmbeddingModelType::default()` now returns `Preset { name: "balanced" }` instead of `Preset { name: "" }`. Language binding mirror structs (Ruby, PHP, and others) have their own `EmbeddingModelType` with a derived or hand-written `Default` that calls `String::default()` (empty) for the `name` field; when that flows through `From<EmbeddingModelType>` into `kreuzberg::embed_texts_async`, `get_preset("")` returns `None`, causing "Unknown embedding preset: " errors. All defaults across the codebase converge on "balanced", so the `Default` impl is now consistent with `default_model()` and `EmbeddingConfig::default()`. Added a unit test `test_embedding_model_type_default_is_balanced` to lock this in. (`crates/kreuzberg/src/core/config/processing.rs`)
 
 - **e2e/elixir**: Regenerated with alef v0.17.19, which fixes a keyword-opts threshold bug in the Elixir e2e codegen. When a call had 2+ trailing optional parameters (e.g., `mime_type`, `config`), the codegen now emits all optional args in keyword form (`mime_type: "...", config: "..."`), not mixed positional and keyword (`mime_type: "...", "{}"`). This respects Elixir's syntax requirement that all positional args come before keyword args. Fixes smoke_test and other e2e test compile errors. (`alef.toml`, `e2e/elixir/test/*_test.exs`)

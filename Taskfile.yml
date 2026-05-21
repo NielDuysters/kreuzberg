@@ -394,7 +394,7 @@ tasks:
   kotlin:e2e:
     desc: "Run Kotlin e2e tests"
     cmds:
-      - alef test --e2e --lang kotlin
+      - alef test --e2e --lang kotlin_android
 
   swift:e2e:
     desc: "Run Swift e2e tests"
