@@ -436,6 +436,11 @@ namespace = "dev.kreuzberg"
 artifact_id = "kreuzberg-android"
 group_id = "dev.kreuzberg"
 abis = ["arm64-v8a", "x86_64"]
+exclude_functions = [
+  # embed_texts_async creates naming conflict with suspend wrapper of embed_texts.
+  # Callers should use embedTextsAsync (suspend) from embed_texts instead.
+  "embed_texts_async",
+]
 
 [crates.swift]
 module_name = "Kreuzberg"
