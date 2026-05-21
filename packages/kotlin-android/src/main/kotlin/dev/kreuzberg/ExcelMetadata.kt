@@ -31,5 +31,5 @@ data class ExcelMetadata(
     /** Number of sheets in the workbook. */
     val sheetCount: Int? = null,
     /** Names of all sheets in the workbook. */
-    val sheetNames: List<String>? = emptyList()
+    val sheetNames: List<String>? = null
 )

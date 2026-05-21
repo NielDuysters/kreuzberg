@@ -38,12 +38,14 @@ data class ChunkingConfig(
      *
      * Default: 1000
      */
+    @com.fasterxml.jackson.annotation.JsonProperty("max_chars")
     val maxCharacters: Long = 1000L,
     /**
      * Overlap between chunks (in units determined by `sizing`).
      *
      * Default: 200
      */
+    @com.fasterxml.jackson.annotation.JsonProperty("max_overlap")
     val overlap: Long = 200L,
     /**
      * Whether to trim whitespace from chunk boundaries.
@@ -67,7 +69,8 @@ data class ChunkingConfig(
      * Default: `Characters` (Unicode character count).
      * Enable `chunking-tiktoken` or `chunking-tokenizers` features for token-based sizing.
      */
-    val sizing: ChunkSizing = ChunkSizing.CHARACTERS,
+    @field:com.fasterxml.jackson.databind.annotation.JsonSerialize(`as` = ChunkSizing::class)
+    val sizing: ChunkSizing,
     /**
      * When `true` and `chunker_type` is `Markdown`, prepend the heading hierarchy
      * path (e.g. `"# Title > ## Section\n\n"`) to each chunk's content string.

@@ -46,4 +46,24 @@ enum class ChunkerType {
     YAML,
     @com.fasterxml.jackson.annotation.JsonProperty("semantic")
     SEMANTIC;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        TEXT -> "text"
+        MARKDOWN -> "markdown"
+        YAML -> "yaml"
+        SEMANTIC -> "semantic"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): ChunkerType = when (value) {
+            "text" -> TEXT
+            "markdown" -> MARKDOWN
+            "yaml" -> YAML
+            "semantic" -> SEMANTIC
+            else -> throw IllegalArgumentException("Unknown ChunkerType value: $value")
+        }
+    }
 }

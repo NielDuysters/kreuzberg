@@ -1019,7 +1019,7 @@ abstract class BoxFnStringOcrConfigDartFnFutureExtractionResult
 abstract class BoxFnStringStringDartFnFutureBool
     implements RustOpaqueInterface {}
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Box < dyn Fn (String , String , ExtractionConfig) -> DartFnFuture < InternalDocument > + Send + Sync >>>
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Box < dyn Fn (String , String , ExtractionConfig ,) -> DartFnFuture < InternalDocument > + Send + Sync >>>
 abstract class BoxFnStringStringExtractionConfigDartFnFutureInternalDocument
     implements RustOpaqueInterface {}
 
@@ -1031,7 +1031,7 @@ abstract class BoxFnVecStringDartFnFutureVecVecF64
 abstract class BoxFnVecU8OcrConfigDartFnFutureExtractionResult
     implements RustOpaqueInterface {}
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Box < dyn Fn (Vec < u8 > , String , ExtractionConfig) -> DartFnFuture < InternalDocument > + Send + Sync >>>
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Box < dyn Fn (Vec < u8 > , String , ExtractionConfig ,) -> DartFnFuture < InternalDocument > + Send + Sync >>>
 abstract class BoxFnVecU8StringExtractionConfigDartFnFutureInternalDocument
     implements RustOpaqueInterface {}
 
@@ -3923,6 +3923,10 @@ class ExtractionResult {
   /// Populated when extracting source code files with the `tree-sitter` feature.
   /// Contains metrics, structural analysis, imports/exports, comments,
   /// docstrings, symbols, diagnostics, and optionally chunked code segments.
+  ///
+  /// Stored as an opaque JSON value so that all language bindings (Go, Java,
+  /// C#, …) can deserialize it as a raw JSON object rather than a typed struct.
+  /// The underlying type is `tree_sitter_language_pack::ProcessResult`.
   final String? codeIntelligence;
 
   /// LLM token usage and cost data for all LLM calls made during this extraction.

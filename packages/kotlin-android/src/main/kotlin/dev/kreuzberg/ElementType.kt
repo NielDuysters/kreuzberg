@@ -61,4 +61,38 @@ enum class ElementType {
     /** Header text */
     @com.fasterxml.jackson.annotation.JsonProperty("header")
     HEADER;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        TITLE -> "title"
+        NARRATIVE_TEXT -> "narrative_text"
+        HEADING -> "heading"
+        LIST_ITEM -> "list_item"
+        TABLE -> "table"
+        IMAGE -> "image"
+        PAGE_BREAK -> "page_break"
+        CODE_BLOCK -> "code_block"
+        BLOCK_QUOTE -> "block_quote"
+        FOOTER -> "footer"
+        HEADER -> "header"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): ElementType = when (value) {
+            "title" -> TITLE
+            "narrative_text" -> NARRATIVE_TEXT
+            "heading" -> HEADING
+            "list_item" -> LIST_ITEM
+            "table" -> TABLE
+            "image" -> IMAGE
+            "page_break" -> PAGE_BREAK
+            "code_block" -> CODE_BLOCK
+            "block_quote" -> BLOCK_QUOTE
+            "footer" -> FOOTER
+            "header" -> HEADER
+            else -> throw IllegalArgumentException("Unknown ElementType value: $value")
+        }
+    }
 }

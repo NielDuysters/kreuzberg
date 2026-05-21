@@ -37,8 +37,8 @@ sealed class ChunkSizing {
     /** Size measured in Unicode characters (default). */
     object Characters : ChunkSizing()
     /** Size measured in tokens from a HuggingFace tokenizer. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Tokenizer(
         val model: String,
         val cacheDir: Path?

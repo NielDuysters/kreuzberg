@@ -29,17 +29,18 @@ package dev.kreuzberg
  */
 data class OcrElement(
     /** The recognized text content. */
-    val text: String,
+    val text: String = "",
     /** Bounding geometry (rectangle or quadrilateral). */
+    @field:com.fasterxml.jackson.databind.annotation.JsonSerialize(`as` = OcrBoundingGeometry::class)
     val geometry: OcrBoundingGeometry,
     /** Confidence scores for detection and recognition. */
     val confidence: OcrConfidence = OcrConfidence(),
     /** Hierarchical level (word, line, block, page). */
     val level: OcrElementLevel = OcrElementLevel.LINE,
     /** Rotation information (if detected). */
-    val rotation: OcrRotation? = OcrRotation(),
+    val rotation: OcrRotation? = null,
     /** Page number (1-indexed). */
-    val pageNumber: Int,
+    val pageNumber: Int = 0,
     /**
      * Parent element ID for hierarchical relationships.
      *
@@ -47,5 +48,5 @@ data class OcrElement(
      */
     val parentId: String? = null,
     /** Backend-specific metadata that doesn't fit the unified schema. */
-    val backendMetadata: Map<String, String> = emptyMap()
+    val backendMetadata: Map<String, Any> = emptyMap()
 )

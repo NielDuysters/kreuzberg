@@ -36,4 +36,22 @@ enum class PageUnitType {
     /** Spreadsheet sheets (XLSX, ODS) */
     @com.fasterxml.jackson.annotation.JsonProperty("sheet")
     SHEET;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        PAGE -> "page"
+        SLIDE -> "slide"
+        SHEET -> "sheet"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): PageUnitType = when (value) {
+            "page" -> PAGE
+            "slide" -> SLIDE
+            "sheet" -> SHEET
+            else -> throw IllegalArgumentException("Unknown PageUnitType value: $value")
+        }
+    }
 }

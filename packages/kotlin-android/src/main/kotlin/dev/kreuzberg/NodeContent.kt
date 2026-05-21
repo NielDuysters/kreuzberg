@@ -31,53 +31,53 @@ package dev.kreuzberg
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = NodeContentSerializer::class)
 sealed class NodeContent {
     /** Document title. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Title(
         val text: String
     ) : NodeContent()
     /** Section heading with level (1-6). */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Heading(
         val level: Byte,
         val text: String
     ) : NodeContent()
     /** Body text paragraph. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Paragraph(
         val text: String
     ) : NodeContent()
     /** List container — children are `ListItem` nodes. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class List(
         val ordered: Boolean
     ) : NodeContent()
     /** Individual list item. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class ListItem(
         val text: String
     ) : NodeContent()
     /** Table with structured cell grid. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Table(
         val grid: TableGrid
     ) : NodeContent()
     /** Image reference. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Image(
         val description: String?,
         val imageIndex: Int?,
         val src: String?
     ) : NodeContent()
     /** Code block. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Code(
         val text: String,
         val language: String?
@@ -85,14 +85,14 @@ sealed class NodeContent {
     /** Block quote — container, children carry the quoted content. */
     object Quote : NodeContent()
     /** Mathematical formula / equation. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Formula(
         val text: String
     ) : NodeContent()
     /** Footnote reference content. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Footnote(
         val text: String
     ) : NodeContent()
@@ -102,8 +102,8 @@ sealed class NodeContent {
      * `heading_level` + `heading_text` capture the section heading directly
      * rather than relying on a first-child positional convention.
      */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Group(
         val label: String?,
         val headingLevel: Byte?,
@@ -112,8 +112,8 @@ sealed class NodeContent {
     /** Page break marker. */
     object PageBreak : NodeContent()
     /** Presentation slide container — children are the slide's content nodes. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Slide(
         val number: Int,
         val title: String?
@@ -121,15 +121,15 @@ sealed class NodeContent {
     /** Definition list container — children are `DefinitionItem` nodes. */
     object DefinitionList : NodeContent()
     /** Individual definition list entry with term and definition. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class DefinitionItem(
         val term: String,
         val definition: String
     ) : NodeContent()
     /** Citation or bibliographic reference. */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Citation(
         val key: String,
         val text: String
@@ -139,8 +139,8 @@ sealed class NodeContent {
      *
      * Children carry the admonition body content.
      */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Admonition(
         val kind: String,
         val title: String?
@@ -151,15 +151,15 @@ sealed class NodeContent {
      * Used for content that cannot be mapped to a semantic node type
      * (e.g. JSX in MDX, raw LaTeX in markdown, embedded HTML).
      */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class RawBlock(
         val format: String,
         val content: String
     ) : NodeContent()
     /** Structured metadata block (email headers, YAML frontmatter, etc.). */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class MetadataBlock(
         val entries: kotlin.collections.List<String>
     ) : NodeContent()

@@ -31,8 +31,8 @@ package dev.kreuzberg
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = OcrBoundingGeometrySerializer::class)
 sealed class OcrBoundingGeometry {
     /** Axis-aligned bounding box (typical for Tesseract output). */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Rectangle(
         val left: Int,
         val top: Int,
@@ -45,8 +45,8 @@ sealed class OcrBoundingGeometry {
      * Points are in clockwise order starting from top-left:
      * `[top_left, top_right, bottom_right, bottom_left]`
      */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Quadrilateral(
         val points: String
     ) : OcrBoundingGeometry()

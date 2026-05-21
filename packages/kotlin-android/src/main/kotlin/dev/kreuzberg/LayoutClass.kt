@@ -65,4 +65,50 @@ enum class LayoutClass {
     FORM,
     @com.fasterxml.jackson.annotation.JsonProperty("key_value_region")
     KEY_VALUE_REGION;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        CAPTION -> "caption"
+        FOOTNOTE -> "footnote"
+        FORMULA -> "formula"
+        LIST_ITEM -> "list_item"
+        PAGE_FOOTER -> "page_footer"
+        PAGE_HEADER -> "page_header"
+        PICTURE -> "picture"
+        SECTION_HEADER -> "section_header"
+        TABLE -> "table"
+        TEXT -> "text"
+        TITLE -> "title"
+        DOCUMENT_INDEX -> "document_index"
+        CODE -> "code"
+        CHECKBOX_SELECTED -> "checkbox_selected"
+        CHECKBOX_UNSELECTED -> "checkbox_unselected"
+        FORM -> "form"
+        KEY_VALUE_REGION -> "key_value_region"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): LayoutClass = when (value) {
+            "caption" -> CAPTION
+            "footnote" -> FOOTNOTE
+            "formula" -> FORMULA
+            "list_item" -> LIST_ITEM
+            "page_footer" -> PAGE_FOOTER
+            "page_header" -> PAGE_HEADER
+            "picture" -> PICTURE
+            "section_header" -> SECTION_HEADER
+            "table" -> TABLE
+            "text" -> TEXT
+            "title" -> TITLE
+            "document_index" -> DOCUMENT_INDEX
+            "code" -> CODE
+            "checkbox_selected" -> CHECKBOX_SELECTED
+            "checkbox_unselected" -> CHECKBOX_UNSELECTED
+            "form" -> FORM
+            "key_value_region" -> KEY_VALUE_REGION
+            else -> throw IllegalArgumentException("Unknown LayoutClass value: $value")
+        }
+    }
 }

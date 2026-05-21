@@ -43,4 +43,26 @@ enum class ExecutionProviderType {
     /** NVIDIA TensorRT (optimized CUDA inference). */
     @com.fasterxml.jackson.annotation.JsonProperty("tensorrt")
     TENSOR_RT;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        AUTO -> "auto"
+        CPU -> "cpu"
+        CORE_ML -> "coreml"
+        CUDA -> "cuda"
+        TENSOR_RT -> "tensorrt"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): ExecutionProviderType = when (value) {
+            "auto" -> AUTO
+            "cpu" -> CPU
+            "coreml" -> CORE_ML
+            "cuda" -> CUDA
+            "tensorrt" -> TENSOR_RT
+            else -> throw IllegalArgumentException("Unknown ExecutionProviderType value: $value")
+        }
+    }
 }

@@ -28,7 +28,7 @@ package dev.kreuzberg
  */
 data class XmlMetadata(
     /** Total number of XML elements processed */
-    val elementCount: Int,
+    val elementCount: Int = 0,
     /** List of unique element tag names (sorted) */
     val uniqueElements: List<String> = emptyList()
 )

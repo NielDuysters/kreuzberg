@@ -45,4 +45,38 @@ enum class PSMMode {
     CIRCLE_WORD,
     @com.fasterxml.jackson.annotation.JsonProperty("SingleChar")
     SINGLE_CHAR;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        OSD_ONLY -> "OsdOnly"
+        AUTO_OSD -> "AutoOsd"
+        AUTO_ONLY -> "AutoOnly"
+        AUTO -> "Auto"
+        SINGLE_COLUMN -> "SingleColumn"
+        SINGLE_BLOCK_VERTICAL -> "SingleBlockVertical"
+        SINGLE_BLOCK -> "SingleBlock"
+        SINGLE_LINE -> "SingleLine"
+        SINGLE_WORD -> "SingleWord"
+        CIRCLE_WORD -> "CircleWord"
+        SINGLE_CHAR -> "SingleChar"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): PSMMode = when (value) {
+            "OsdOnly" -> OSD_ONLY
+            "AutoOsd" -> AUTO_OSD
+            "AutoOnly" -> AUTO_ONLY
+            "Auto" -> AUTO
+            "SingleColumn" -> SINGLE_COLUMN
+            "SingleBlockVertical" -> SINGLE_BLOCK_VERTICAL
+            "SingleBlock" -> SINGLE_BLOCK
+            "SingleLine" -> SINGLE_LINE
+            "SingleWord" -> SINGLE_WORD
+            "CircleWord" -> CIRCLE_WORD
+            "SingleChar" -> SINGLE_CHAR
+            else -> throw IllegalArgumentException("Unknown PSMMode value: $value")
+        }
+    }
 }

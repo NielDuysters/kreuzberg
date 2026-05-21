@@ -35,4 +35,24 @@ enum class ListType {
     /** Indented items */
     @com.fasterxml.jackson.annotation.JsonProperty("Indented")
     INDENTED;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        BULLET -> "Bullet"
+        NUMBERED -> "Numbered"
+        LETTERED -> "Lettered"
+        INDENTED -> "Indented"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): ListType = when (value) {
+            "Bullet" -> BULLET
+            "Numbered" -> NUMBERED
+            "Lettered" -> LETTERED
+            "Indented" -> INDENTED
+            else -> throw IllegalArgumentException("Unknown ListType value: $value")
+        }
+    }
 }

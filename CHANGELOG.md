@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **alef**: bumped to v0.17.24. Regenerated all bindings and e2e tests. v0.17.24 includes: conditional `#[php(prop)]` for Prop-compatible types only (fixes E0277 errors for non-Prop fields), Kotlin/Android codegen fixes (named struct field default-construction, sealed-class field annotations, JNI single-param `is_optional` propagation), Dart pubspec single-caret version constraint, alef-e2e/zig module_name path fix, valid `build.zig.zon` declarations, scaffold wasm filename underscore conversion, alef-e2e/csharp synthetic chunk assertion inline predicates (`chunks_have_heading_context`, `first_chunk_starts_with_heading`), alef-e2e/python equivalent. Known regression: `e2e/csharp/tests/ContractTests.cs` is no longer emitted by the C# e2e generator; other languages still emit their contract test file (tracked for upstream fix). (`alef.toml`, ~935 regenerated files)
+
 - **ci**: Split pub.dev publishing into a dedicated `publish-pubdev.yaml` workflow. pub.dev OIDC trusted publishing rejects tokens from `release` events; only `push` and `workflow_dispatch` are accepted. The Dart package embeds platform-specific native binaries (Android JNI, iOS XCFramework, server libs), so the main workflow now assembles them into a `dart-package-assembled` artifact and dispatches `publish-pubdev.yaml` via `workflow_dispatch` with the run ID; that workflow downloads the artifact and publishes. One-time setup required: configure pub.dev → kreuzberg package → Admin → Automated publishing with workflow path `.github/workflows/publish-pubdev.yaml`.
 
 ### Fixed

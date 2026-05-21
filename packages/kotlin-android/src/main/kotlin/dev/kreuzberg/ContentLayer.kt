@@ -39,4 +39,24 @@ enum class ContentLayer {
     /** Footnote content. */
     @com.fasterxml.jackson.annotation.JsonProperty("footnote")
     FOOTNOTE;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        BODY -> "body"
+        HEADER -> "header"
+        FOOTER -> "footer"
+        FOOTNOTE -> "footnote"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): ContentLayer = when (value) {
+            "body" -> BODY
+            "header" -> HEADER
+            "footer" -> FOOTER
+            "footnote" -> FOOTNOTE
+            else -> throw IllegalArgumentException("Unknown ContentLayer value: $value")
+        }
+    }
 }

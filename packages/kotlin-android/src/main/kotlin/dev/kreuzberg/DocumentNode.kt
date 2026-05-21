@@ -31,6 +31,7 @@ data class DocumentNode(
     /** Deterministic identifier (hash of content + position). */
     val id: String,
     /** Node content — tagged enum, type-specific data only. */
+    @field:com.fasterxml.jackson.databind.annotation.JsonSerialize(`as` = NodeContent::class)
     val content: NodeContent,
     /** Parent node index (`null` = root-level node). */
     val parent: Int? = null,

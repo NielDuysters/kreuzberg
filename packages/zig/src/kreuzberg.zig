@@ -1577,6 +1577,10 @@ pub const ExtractionResult = struct {
     /// Populated when extracting source code files with the `tree-sitter` feature.
     /// Contains metrics, structural analysis, imports/exports, comments,
     /// docstrings, symbols, diagnostics, and optionally chunked code segments.
+    ///
+    /// Stored as an opaque JSON value so that all language bindings (Go, Java,
+    /// C#, …) can deserialize it as a raw JSON object rather than a typed struct.
+    /// The underlying type is `tree_sitter_language_pack.ProcessResult`.
     code_intelligence: ?[]const u8,
     /// LLM token usage and cost data for all LLM calls made during this extraction.
     ///

@@ -28,13 +28,13 @@ package dev.kreuzberg
  */
 data class ArchiveMetadata(
     /** Archive format ("ZIP", "TAR", "7Z", etc.) */
-    val format: String,
+    val format: String = "",
     /** Total number of files in the archive */
-    val fileCount: Int,
+    val fileCount: Int = 0,
     /** List of file paths within the archive */
     val fileList: List<String> = emptyList(),
     /** Total uncompressed size in bytes */
-    val totalSize: Long,
+    val totalSize: Long = 0L,
     /** Compressed size in bytes (if available) */
     val compressedSize: Long? = null
 )

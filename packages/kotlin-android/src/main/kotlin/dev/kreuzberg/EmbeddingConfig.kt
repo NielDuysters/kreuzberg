@@ -31,6 +31,7 @@ import java.nio.file.Path
  */
 data class EmbeddingConfig(
     /** The embedding model to use (defaults to "balanced" preset if not specified) */
+    @field:com.fasterxml.jackson.databind.annotation.JsonSerialize(`as` = EmbeddingModelType::class)
     val model: EmbeddingModelType,
     /** Whether to normalize embedding vectors (recommended for cosine similarity) */
     val normalize: Boolean = true,

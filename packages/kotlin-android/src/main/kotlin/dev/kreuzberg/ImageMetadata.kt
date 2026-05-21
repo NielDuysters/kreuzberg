@@ -28,11 +28,11 @@ package dev.kreuzberg
  */
 data class ImageMetadata(
     /** Image width in pixels */
-    val width: Int,
+    val width: Int = 0,
     /** Image height in pixels */
-    val height: Int,
+    val height: Int = 0,
     /** Image format (e.g., "PNG", "JPEG", "TIFF") */
-    val format: String,
+    val format: String = "",
     /** EXIF metadata tags */
     val exif: Map<String, String> = emptyMap()
 )

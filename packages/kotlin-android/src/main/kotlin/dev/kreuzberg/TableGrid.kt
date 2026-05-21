@@ -28,9 +28,9 @@ package dev.kreuzberg
  */
 data class TableGrid(
     /** Number of rows in the table. */
-    val rows: Int,
+    val rows: Int = 0,
     /** Number of columns in the table. */
-    val cols: Int,
+    val cols: Int = 0,
     /** All cells in row-major order. */
     val cells: List<GridCell> = emptyList()
 )

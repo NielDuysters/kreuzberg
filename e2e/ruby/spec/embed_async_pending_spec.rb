@@ -11,19 +11,19 @@ require 'spec_helper'
 
 RSpec.describe 'embed_async_pending' do
   it 'embed_texts_async_empty_input: embed_texts_async: empty text list' do
-    result = Kreuzberg.embed_texts_async([], nil)
+    result = Kreuzberg.embed_texts_async([])
     expect(result.length).to eq(0)
 
   end
 
   it 'embed_texts_async_happy: embed_texts_async: basic async embedding' do
-    result = Kreuzberg.embed_texts_async(['First', 'Second'], nil)
+    result = Kreuzberg.embed_texts_async([])
     expect(result.length).to be >= 2
 
   end
 
   it 'embed_texts_async_preset_switch: embed_texts_async: preset override' do
-    result = Kreuzberg.embed_texts_async(['Text'], {embedding_model: 'default'})
+    result = Kreuzberg.embed_texts_async([], {embedding_model: 'default'})
 
     expect(result).not_to be_nil
   end

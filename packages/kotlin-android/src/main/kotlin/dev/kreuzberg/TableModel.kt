@@ -50,4 +50,28 @@ enum class TableModel {
     /** Disable table structure model inference entirely; use heuristic path only. */
     @com.fasterxml.jackson.annotation.JsonProperty("disabled")
     DISABLED;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        TATR -> "tatr"
+        SLANET_WIRED -> "slanet_wired"
+        SLANET_WIRELESS -> "slanet_wireless"
+        SLANET_PLUS -> "slanet_plus"
+        SLANET_AUTO -> "slanet_auto"
+        DISABLED -> "disabled"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): TableModel = when (value) {
+            "tatr" -> TATR
+            "slanet_wired" -> SLANET_WIRED
+            "slanet_wireless" -> SLANET_WIRELESS
+            "slanet_plus" -> SLANET_PLUS
+            "slanet_auto" -> SLANET_AUTO
+            "disabled" -> DISABLED
+            else -> throw IllegalArgumentException("Unknown TableModel value: $value")
+        }
+    }
 }

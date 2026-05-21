@@ -61,4 +61,22 @@ enum class ProcessingStage {
      */
     @com.fasterxml.jackson.annotation.JsonProperty("Late")
     LATE;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        EARLY -> "Early"
+        MIDDLE -> "Middle"
+        LATE -> "Late"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): ProcessingStage = when (value) {
+            "Early" -> EARLY
+            "Middle" -> MIDDLE
+            "Late" -> LATE
+            else -> throw IllegalArgumentException("Unknown ProcessingStage value: $value")
+        }
+    }
 }

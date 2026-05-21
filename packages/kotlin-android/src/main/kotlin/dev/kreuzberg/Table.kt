@@ -31,9 +31,9 @@ data class Table(
     /** Table cells as a 2D vector (rows × columns) */
     val cells: List<List<String>> = emptyList(),
     /** Markdown representation of the table */
-    val markdown: String,
+    val markdown: String = "",
     /** Page number where the table was found (1-indexed) */
-    val pageNumber: Int,
+    val pageNumber: Int = 0,
     /**
      * Bounding box of the table on the page (PDF coordinates: x0=left, y0=bottom, x1=right, y1=top).
      * Only populated for PDF-extracted tables when position data is available.

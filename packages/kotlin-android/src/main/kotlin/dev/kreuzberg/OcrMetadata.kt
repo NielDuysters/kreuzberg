@@ -28,13 +28,13 @@ package dev.kreuzberg
  */
 data class OcrMetadata(
     /** OCR language code(s) used */
-    val language: String,
+    val language: String = "",
     /** Tesseract Page Segmentation Mode (PSM) */
-    val psm: Int,
+    val psm: Int = 0,
     /** Output format (e.g., "text", "hocr") */
-    val outputFormat: String,
+    val outputFormat: String = "",
     /** Number of tables detected */
-    val tableCount: Int,
+    val tableCount: Int = 0,
     val tableRows: Int? = null,
     val tableCols: Int? = null
 )

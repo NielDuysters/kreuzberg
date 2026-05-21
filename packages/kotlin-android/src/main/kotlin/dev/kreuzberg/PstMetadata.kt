@@ -22,4 +22,4 @@
 package dev.kreuzberg
 
 /** Outlook PST archive metadata. */
-data class PstMetadata(val messageCount: Long)
+data class PstMetadata(val messageCount: Long = 0L)

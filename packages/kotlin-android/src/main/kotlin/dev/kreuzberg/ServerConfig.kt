@@ -37,9 +37,9 @@ package dev.kreuzberg
  */
 data class ServerConfig(
     /** Server host address (e.g., "127.0.0.1", "0.0.0.0") */
-    val host: String,
+    val host: String = "",
     /** Server port number */
-    val port: Short,
+    val port: Short = 0,
     /**
      * CORS allowed origins. Empty vector means allow all origins.
      *
@@ -49,7 +49,7 @@ data class ServerConfig(
      */
     val corsOrigins: List<String> = emptyList(),
     /** Maximum size of request body in bytes (default: 100 MB) */
-    val maxRequestBodyBytes: Long,
+    val maxRequestBodyBytes: Long = 0L,
     /** Maximum size of multipart fields in bytes (default: 100 MB) */
-    val maxMultipartFieldBytes: Long
+    val maxMultipartFieldBytes: Long = 0L
 )

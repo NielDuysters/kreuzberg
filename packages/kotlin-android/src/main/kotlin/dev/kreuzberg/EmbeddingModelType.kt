@@ -26,14 +26,14 @@ package dev.kreuzberg
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = EmbeddingModelTypeSerializer::class)
 sealed class EmbeddingModelType {
     /** Use a preset model configuration (recommended) */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Preset(
         val name: String
     ) : EmbeddingModelType()
     /** Use a custom ONNX model from HuggingFace */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Custom(
         val modelId: String,
         val dimensions: Long
@@ -44,8 +44,8 @@ sealed class EmbeddingModelType {
      * Uses the model specified in the nested `LlmConfig` (e.g.,
      * `"openai/text-embedding-3-small"`).
      */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Llm(
         val llm: LlmConfig
     ) : EmbeddingModelType()
@@ -70,8 +70,8 @@ sealed class EmbeddingModelType {
      *
      * See `register_embedding_backend`.
      */
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None::class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Plugin(
         val name: String
     ) : EmbeddingModelType()

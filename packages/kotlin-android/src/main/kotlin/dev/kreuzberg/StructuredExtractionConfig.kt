@@ -29,7 +29,7 @@ package dev.kreuzberg
  */
 data class StructuredExtractionConfig(
     /** JSON Schema defining the desired output structure. */
-    val schema: String,
+    val schema: Any,
     /** Schema name passed to the LLM's structured output mode. */
     val schemaName: String,
     /** Optional schema description for the LLM. */

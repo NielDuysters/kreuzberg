@@ -30,106 +30,26 @@ package dev.kreuzberg
 @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = FormatMetadataDeserializer::class)
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = FormatMetadataSerializer::class)
 sealed class FormatMetadata {
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Pdf(
-        val metadata: PdfMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Docx(
-        val metadata: DocxMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Excel(
-        val metadata: ExcelMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Email(
-        val metadata: EmailMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Pptx(
-        val metadata: PptxMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Archive(
-        val metadata: ArchiveMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Image(
-        val metadata: ImageMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Xml(
-        val metadata: XmlMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Text(
-        val metadata: TextMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Html(
-        val metadata: HtmlMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Ocr(
-        val metadata: OcrMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Csv(
-        val metadata: CsvMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Bibtex(
-        val metadata: BibtexMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Citation(
-        val metadata: CitationMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class FictionBook(
-        val metadata: FictionBookMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Dbf(
-        val metadata: DbfMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Jats(
-        val metadata: JatsMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Epub(
-        val metadata: EpubMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Pst(
-        val metadata: PstMetadata
-    ) : FormatMetadata()
-    @com.fasterxml.jackson.databind.annotation.JsonDeserialize
-    @com.fasterxml.jackson.databind.annotation.JsonSerialize
-    data class Code(
-        val value: String
-    ) : FormatMetadata()
+    data class Pdf(val metadata: PdfMetadata) : FormatMetadata()
+    data class Docx(val metadata: DocxMetadata) : FormatMetadata()
+    data class Excel(val metadata: ExcelMetadata) : FormatMetadata()
+    data class Email(val metadata: EmailMetadata) : FormatMetadata()
+    data class Pptx(val metadata: PptxMetadata) : FormatMetadata()
+    data class Archive(val metadata: ArchiveMetadata) : FormatMetadata()
+    data class Image(val metadata: ImageMetadata) : FormatMetadata()
+    data class Xml(val metadata: XmlMetadata) : FormatMetadata()
+    data class Text(val metadata: TextMetadata) : FormatMetadata()
+    data class Html(val metadata: HtmlMetadata) : FormatMetadata()
+    data class Ocr(val metadata: OcrMetadata) : FormatMetadata()
+    data class Csv(val metadata: CsvMetadata) : FormatMetadata()
+    data class Bibtex(val metadata: BibtexMetadata) : FormatMetadata()
+    data class Citation(val metadata: CitationMetadata) : FormatMetadata()
+    data class FictionBook(val metadata: FictionBookMetadata) : FormatMetadata()
+    data class Dbf(val metadata: DbfMetadata) : FormatMetadata()
+    data class Jats(val metadata: JatsMetadata) : FormatMetadata()
+    data class Epub(val metadata: EpubMetadata) : FormatMetadata()
+    data class Pst(val metadata: PstMetadata) : FormatMetadata()
+    data class Code(val value: String) : FormatMetadata()
 }
 
 private class FormatMetadataDeserializer : com.fasterxml.jackson.databind.deser.std.StdDeserializer<FormatMetadata>(

@@ -32,7 +32,7 @@ data class OcrPipelineStage(
     /** Tesseract-specific config override for this stage. */
     val tesseractConfig: TesseractConfig? = null,
     /** PaddleOCR-specific config for this stage. */
-    val paddleOcrConfig: String? = null,
+    val paddleOcrConfig: Any? = null,
     /** VLM config override for this pipeline stage. */
     val vlmConfig: LlmConfig? = null,
     /**
@@ -49,5 +49,5 @@ data class OcrPipelineStage(
      * { "mode": "fast", "enable_layout": true }
      * ```
      */
-    val backendOptions: String? = null
+    val backendOptions: Any? = null
 )

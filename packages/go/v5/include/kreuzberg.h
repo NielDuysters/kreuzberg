@@ -6193,6 +6193,13 @@ char *kreuzberg_extraction_result_uris(const KREUZBERGExtractionResult *ptr);
 char *kreuzberg_extraction_result_structured_output(const KREUZBERGExtractionResult *ptr);
 
 /**
+ * Get the `code_intelligence` field from a `ExtractionResult`.
+ * # Safety
+ * Pointer must be a valid handle returned by this library.
+ */
+char *kreuzberg_extraction_result_code_intelligence(const KREUZBERGExtractionResult *ptr);
+
+/**
  * Get the `llm_usage` field from a `ExtractionResult`.
  * # Safety
  * Pointer must be a valid handle returned by this library.

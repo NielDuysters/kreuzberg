@@ -35,4 +35,20 @@ enum class ResultFormat {
     /** Element-based format with semantic element extraction */
     @com.fasterxml.jackson.annotation.JsonProperty("element_based")
     ELEMENT_BASED;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        UNIFIED -> "unified"
+        ELEMENT_BASED -> "element_based"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): ResultFormat = when (value) {
+            "unified" -> UNIFIED
+            "element_based" -> ELEMENT_BASED
+            else -> throw IllegalArgumentException("Unknown ResultFormat value: $value")
+        }
+    }
 }

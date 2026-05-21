@@ -33,5 +33,6 @@ data class TextAnnotation(
     /** End byte offset in the node's text content (exclusive). */
     val end: Int,
     /** Annotation type. */
+    @field:com.fasterxml.jackson.databind.annotation.JsonSerialize(`as` = AnnotationKind::class)
     val kind: AnnotationKind
 )

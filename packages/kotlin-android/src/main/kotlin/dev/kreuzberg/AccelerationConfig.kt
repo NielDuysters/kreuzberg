@@ -31,5 +31,5 @@ data class AccelerationConfig(
     /** Execution provider to use for ONNX inference. */
     val provider: ExecutionProviderType = ExecutionProviderType.AUTO,
     /** GPU device ID (for CUDA/TensorRT). Ignored for CPU/CoreML/Auto. */
-    val deviceId: Int
+    val deviceId: Int = 0
 )

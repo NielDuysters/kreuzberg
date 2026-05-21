@@ -30,12 +30,12 @@ package dev.kreuzberg
  */
 data class LlmUsage(
     /** The LLM model identifier (e.g. "openai/gpt-4o", "anthropic/claude-sonnet-4-20250514"). */
-    val model: String,
+    val model: String = "",
     /**
      * The pipeline stage that triggered this LLM call
      * (e.g. "vlm_ocr", "structured_extraction", "embeddings").
      */
-    val source: String,
+    val source: String = "",
     /** Number of input/prompt tokens consumed. */
     val inputTokens: Long? = null,
     /** Number of output/completion tokens generated. */

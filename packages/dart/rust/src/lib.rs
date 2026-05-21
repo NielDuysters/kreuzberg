@@ -1668,6 +1668,10 @@ pub struct ExtractionResult {
     /// Populated when extracting source code files with the `tree-sitter` feature.
     /// Contains metrics, structural analysis, imports/exports, comments,
     /// docstrings, symbols, diagnostics, and optionally chunked code segments.
+    ///
+    /// Stored as an opaque JSON value so that all language bindings (Go, Java,
+    /// C#, …) can deserialize it as a raw JSON object rather than a typed struct.
+    /// The underlying type is `tree_sitter_language_pack::ProcessResult`.
     pub code_intelligence: Option<String>,
     /// LLM token usage and cost data for all LLM calls made during this extraction.
     ///
@@ -4796,7 +4800,9 @@ impl From<kreuzberg::ExtractionResult> for ExtractionResult {
             structured_output: v
                 .structured_output
                 .map(|j| serde_json::to_string(&j).unwrap_or_default()),
-            code_intelligence: Default::default(),
+            code_intelligence: v
+                .code_intelligence
+                .map(|j| serde_json::to_string(&j).unwrap_or_default()),
             llm_usage: v.llm_usage.map(|vec| vec.into_iter().map(LlmUsage::from).collect()),
             formatted_content: v.formatted_content.map(|s| s.into()),
             ocr_internal_document: Default::default(),
@@ -7104,7 +7110,10 @@ impl From<ExtractionResult> for kreuzberg::ExtractionResult {
                 .structured_output
                 .as_deref()
                 .and_then(|s| serde_json::from_str(s).ok()),
-            code_intelligence: Default::default(),
+            code_intelligence: v
+                .code_intelligence
+                .as_deref()
+                .and_then(|s| serde_json::from_str(s).ok()),
             llm_usage: v.llm_usage.map(|vec| vec.into_iter().map(Into::into).collect()),
             formatted_content: v.formatted_content.map(Into::into),
             ocr_internal_document: Default::default(),

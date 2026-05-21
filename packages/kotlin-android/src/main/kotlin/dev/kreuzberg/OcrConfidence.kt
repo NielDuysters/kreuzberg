@@ -40,5 +40,5 @@ data class OcrConfidence(
      *
      * Range: 0.0 to 1.0.
      */
-    val recognition: Double
+    val recognition: Double = 0.0
 )

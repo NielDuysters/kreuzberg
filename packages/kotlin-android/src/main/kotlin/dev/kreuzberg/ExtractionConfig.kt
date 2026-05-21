@@ -146,7 +146,7 @@ data class ExtractionConfig(
      * formatted output. The `formatted_content` field may be populated
      * when format conversion is applied.
      */
-    val outputFormat: OutputFormat = OutputFormat.PLAIN,
+    val outputFormat: OutputFormat = OutputFormat.Plain,
     /**
      * Layout detection configuration (None = layout detection disabled).
      *
@@ -224,7 +224,7 @@ data class ExtractionConfig(
      * Maximum recursion depth for archive extraction (default: 3).
      * Set to 0 to disable recursive extraction (legacy behavior).
      */
-    val maxArchiveDepth: Long,
+    val maxArchiveDepth: Long = 0L,
     /**
      * Tree-sitter language pack configuration (None = tree-sitter disabled).
      *

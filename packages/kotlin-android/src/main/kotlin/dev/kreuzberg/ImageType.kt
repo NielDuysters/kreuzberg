@@ -35,4 +35,24 @@ enum class ImageType {
     /** Relative path image */
     @com.fasterxml.jackson.annotation.JsonProperty("relative")
     RELATIVE;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        DATA_URI -> "data-uri"
+        INLINE_SVG -> "inline-svg"
+        EXTERNAL -> "external"
+        RELATIVE -> "relative"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): ImageType = when (value) {
+            "data-uri" -> DATA_URI
+            "inline-svg" -> INLINE_SVG
+            "external" -> EXTERNAL
+            "relative" -> RELATIVE
+            else -> throw IllegalArgumentException("Unknown ImageType value: $value")
+        }
+    }
 }

@@ -27,8 +27,8 @@ package dev.kreuzberg
  * This is the main result type returned by all extraction functions.
  */
 data class ExtractionResult(
-    val content: String,
-    val mimeType: String,
+    val content: String = "",
+    val mimeType: String = "",
     val metadata: Metadata = Metadata(),
     /**
      * Extraction strategy used to produce the returned text.
@@ -38,7 +38,7 @@ data class ExtractionResult(
      */
     val extractionMethod: ExtractionMethod? = null,
     val tables: List<Table> = emptyList(),
-    val detectedLanguages: List<String>? = emptyList(),
+    val detectedLanguages: List<String>? = null,
     /**
      * Text chunks when chunking is enabled.
      *
@@ -46,7 +46,7 @@ data class ExtractionResult(
      * overlapping chunks for efficient processing. Each chunk contains the text,
      * optional embeddings (if enabled), and metadata about its position.
      */
-    val chunks: List<Chunk>? = emptyList(),
+    val chunks: List<Chunk>? = null,
     /**
      * Extracted images from the document.
      *
@@ -54,14 +54,14 @@ data class ExtractionResult(
      * contains all images found in the document with their raw data and metadata.
      * Each image may optionally contain a nested `ocr_result` if OCR was performed.
      */
-    val images: List<ExtractedImage>? = emptyList(),
+    val images: List<ExtractedImage>? = null,
     /**
      * Per-page content when page extraction is enabled.
      *
      * When page extraction is configured, the document is split into per-page content
      * with tables and images mapped to their respective pages.
      */
-    val pages: List<PageContent>? = emptyList(),
+    val pages: List<PageContent>? = null,
     /**
      * Semantic elements when element-based result format is enabled.
      *
@@ -69,7 +69,7 @@ data class ExtractionResult(
      * elements with type classification, unique identifiers, and metadata for
      * Unstructured-compatible element-based processing.
      */
-    val elements: List<Element>? = emptyList(),
+    val elements: List<Element>? = null,
     /**
      * Rich Djot content structure (when extracting Djot documents).
      *
@@ -85,7 +85,7 @@ data class ExtractionResult(
      *
      * Always `null` for non-Djot documents.
      */
-    val djotContent: DjotContent? = DjotContent(),
+    val djotContent: DjotContent? = null,
     /**
      * OCR elements with full spatial and confidence metadata.
      *
@@ -101,7 +101,7 @@ data class ExtractionResult(
      *
      * Only populated when `OcrElementConfig.include_elements` is true.
      */
-    val ocrElements: List<OcrElement>? = emptyList(),
+    val ocrElements: List<OcrElement>? = null,
     /**
      * Structured document tree (when document structure extraction is enabled).
      *
@@ -115,7 +115,7 @@ data class ExtractionResult(
      *
      * Independent of `result_format` — can be combined with Unified or ElementBased.
      */
-    val document: DocumentStructure? = DocumentStructure(),
+    val document: DocumentStructure? = null,
     /**
      * Extracted keywords when keyword extraction is enabled.
      *
@@ -123,7 +123,7 @@ data class ExtractionResult(
      * the extracted keywords with scores, algorithm info, and position data.
      * Previously stored in `metadata.additional["keywords"]`.
      */
-    val extractedKeywords: List<Keyword>? = emptyList(),
+    val extractedKeywords: List<Keyword>? = null,
     /**
      * Document quality score from quality analysis.
      *
@@ -147,7 +147,7 @@ data class ExtractionResult(
      * this field contains text notes, highlights, links, stamps, and other
      * annotations found in PDF documents.
      */
-    val annotations: List<PdfAnnotation>? = emptyList(),
+    val annotations: List<PdfAnnotation>? = null,
     /**
      * Nested extraction results from archive contents.
      *
@@ -155,7 +155,7 @@ data class ExtractionResult(
      * full extraction result. Set to `null` for non-archive formats.
      * Use `max_archive_depth` in config to control recursion depth.
      */
-    val children: List<ArchiveEntry>? = emptyList(),
+    val children: List<ArchiveEntry>? = null,
     /**
      * URIs/links discovered during document extraction.
      *
@@ -163,7 +163,7 @@ data class ExtractionResult(
      * other URI-like references found in the document. Always extracted when
      * present in the source document.
      */
-    val uris: List<Uri>? = emptyList(),
+    val uris: List<Uri>? = null,
     /**
      * Structured extraction output from LLM-based JSON schema extraction.
      *
@@ -171,15 +171,19 @@ data class ExtractionResult(
      * extracted document content is sent to a VLM with the provided JSON schema.
      * The response is parsed and stored here as a JSON value matching the schema.
      */
-    val structuredOutput: String? = null,
+    val structuredOutput: Any? = null,
     /**
      * Code intelligence results from tree-sitter analysis.
      *
      * Populated when extracting source code files with the `tree-sitter` feature.
      * Contains metrics, structural analysis, imports/exports, comments,
      * docstrings, symbols, diagnostics, and optionally chunked code segments.
+     *
+     * Stored as an opaque JSON value so that all language bindings (Go, Java,
+     * C#, …) can deserialize it as a raw JSON object rather than a typed struct.
+     * The underlying type is `tree_sitter_language_pack.ProcessResult`.
      */
-    val codeIntelligence: String? = null,
+    val codeIntelligence: Any? = null,
     /**
      * LLM token usage and cost data for all LLM calls made during this extraction.
      *
@@ -189,7 +193,7 @@ data class ExtractionResult(
      *
      * `null` when no LLM was used.
      */
-    val llmUsage: List<LlmUsage>? = emptyList(),
+    val llmUsage: List<LlmUsage>? = null,
     /**
      * Pre-rendered content in the requested output format.
      *

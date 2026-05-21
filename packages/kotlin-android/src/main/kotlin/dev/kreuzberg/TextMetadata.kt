@@ -29,15 +29,15 @@ package dev.kreuzberg
  */
 data class TextMetadata(
     /** Number of lines in the document */
-    val lineCount: Int,
+    val lineCount: Int = 0,
     /** Number of words */
-    val wordCount: Int,
+    val wordCount: Int = 0,
     /** Number of characters */
-    val characterCount: Int,
+    val characterCount: Int = 0,
     /** Markdown headers (headings text only, for Markdown files) */
-    val headers: List<String>? = emptyList(),
+    val headers: List<String>? = null,
     /** Markdown links as (text, url) tuples (for Markdown files) */
-    val links: List<String>? = emptyList(),
+    val links: List<String>? = null,
     /** Code blocks as (language, code) tuples (for Markdown files) */
-    val codeBlocks: List<String>? = emptyList()
+    val codeBlocks: List<String>? = null
 )

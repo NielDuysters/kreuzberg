@@ -33,7 +33,7 @@ data class OcrExtractionResult(
     /** Original MIME type of the processed image */
     val mimeType: String,
     /** OCR processing metadata (confidence scores, language, etc.) */
-    val metadata: Map<String, String> = emptyMap(),
+    val metadata: Map<String, Any> = emptyMap(),
     /** Tables detected and extracted via OCR */
     val tables: List<OcrTable> = emptyList(),
     /**

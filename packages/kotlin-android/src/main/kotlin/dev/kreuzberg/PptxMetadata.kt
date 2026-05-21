@@ -28,7 +28,7 @@ package dev.kreuzberg
  */
 data class PptxMetadata(
     /** Total number of slides in the presentation */
-    val slideCount: Int,
+    val slideCount: Int = 0,
     /** Names of slides (if available) */
     val slideNames: List<String> = emptyList(),
     /** Number of embedded images */

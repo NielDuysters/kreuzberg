@@ -41,4 +41,28 @@ enum class LinkType {
     /** Other link type */
     @com.fasterxml.jackson.annotation.JsonProperty("other")
     OTHER;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        ANCHOR -> "anchor"
+        INTERNAL -> "internal"
+        EXTERNAL -> "external"
+        EMAIL -> "email"
+        PHONE -> "phone"
+        OTHER -> "other"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): LinkType = when (value) {
+            "anchor" -> ANCHOR
+            "internal" -> INTERNAL
+            "external" -> EXTERNAL
+            "email" -> EMAIL
+            "phone" -> PHONE
+            "other" -> OTHER
+            else -> throw IllegalArgumentException("Unknown LinkType value: $value")
+        }
+    }
 }

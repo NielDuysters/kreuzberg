@@ -34,15 +34,15 @@ data class OcrConfig(
      */
     val enabled: Boolean = true,
     /** OCR backend: tesseract, easyocr, paddleocr */
-    val backend: String,
+    val backend: String = "",
     /** Language code (e.g., "eng", "deu") */
-    val language: String,
+    val language: String = "",
     /** Tesseract-specific configuration (optional) */
     val tesseractConfig: TesseractConfig? = null,
     /** Output format for OCR results (optional, for format conversion) */
     val outputFormat: OutputFormat? = null,
     /** PaddleOCR-specific configuration (optional, JSON passthrough) */
-    val paddleOcrConfig: String? = null,
+    val paddleOcrConfig: Any? = null,
     /**
      * Arbitrary per-call options passed through to the backend unchanged.
      *
@@ -65,7 +65,7 @@ data class OcrConfig(
      * { "mode": "fast", "enable_layout": true, "timeout_ms": 5000 }
      * ```
      */
-    val backendOptions: String? = null,
+    val backendOptions: Any? = null,
     /** OCR element extraction configuration */
     val elementConfig: OcrElementConfig? = null,
     /**

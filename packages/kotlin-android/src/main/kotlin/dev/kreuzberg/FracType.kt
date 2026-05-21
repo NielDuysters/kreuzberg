@@ -30,4 +30,24 @@ enum class FracType {
     LINEAR,
     @com.fasterxml.jackson.annotation.JsonProperty("Skewed")
     SKEWED;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        BAR -> "Bar"
+        NO_BAR -> "NoBar"
+        LINEAR -> "Linear"
+        SKEWED -> "Skewed"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): FracType = when (value) {
+            "Bar" -> BAR
+            "NoBar" -> NO_BAR
+            "Linear" -> LINEAR
+            "Skewed" -> SKEWED
+            else -> throw IllegalArgumentException("Unknown FracType value: $value")
+        }
+    }
 }

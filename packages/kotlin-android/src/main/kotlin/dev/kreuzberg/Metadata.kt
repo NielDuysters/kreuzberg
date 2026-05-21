@@ -33,9 +33,9 @@ data class Metadata(
     /** Document subject or description */
     val subject: String? = null,
     /** Primary author(s) - always Vec for consistency */
-    val authors: List<String>? = emptyList(),
+    val authors: List<String>? = null,
     /** Keywords/tags - always Vec for consistency */
-    val keywords: List<String>? = emptyList(),
+    val keywords: List<String>? = null,
     /** Primary language (ISO 639 code) */
     val language: String? = null,
     /** Creation timestamp (ISO 8601 format) */
@@ -47,20 +47,21 @@ data class Metadata(
     /** User who last modified the document */
     val modifiedBy: String? = null,
     /** Page/slide/sheet structure with boundaries */
-    val pages: PageStructure? = PageStructure(),
+    val pages: PageStructure? = null,
     /**
      * Format-specific metadata (discriminated union)
      *
      * Contains detailed metadata specific to the document format.
      * Serialized as a nested `"format"` object with a `format_type` discriminator field.
      */
+    @field:com.fasterxml.jackson.databind.annotation.JsonSerialize(`as` = FormatMetadata::class)
     val format: FormatMetadata? = null,
     /** Image preprocessing metadata (when OCR preprocessing was applied) */
-    val imagePreprocessing: ImagePreprocessingMetadata? = ImagePreprocessingMetadata(),
+    val imagePreprocessing: ImagePreprocessingMetadata? = null,
     /** JSON schema (for structured data extraction) */
-    val jsonSchema: String? = null,
+    val jsonSchema: Any? = null,
     /** Error metadata (for batch operations) */
-    val error: ErrorMetadata? = ErrorMetadata(),
+    val error: ErrorMetadata? = null,
     /**
      * Extraction duration in milliseconds (for benchmarking).
      *
@@ -71,7 +72,7 @@ data class Metadata(
     /** Document category (from frontmatter or classification). */
     val category: String? = null,
     /** Document tags (from frontmatter). */
-    val tags: List<String>? = emptyList(),
+    val tags: List<String>? = null,
     /** Document version string (from frontmatter). */
     val documentVersion: String? = null,
     /** Abstract or summary text (from frontmatter). */
@@ -90,12 +91,12 @@ data class Metadata(
      * (Tesseract, PaddleOCR, VLM, etc.) and used that output as the primary
      * or fallback text. `false` means native text extraction was used exclusively.
      */
-    val ocrUsed: Boolean,
+    val ocrUsed: Boolean = false,
     /**
      * Additional custom fields from postprocessors.
      *
      * Serialized as a nested `"additional"` object (not flattened at root level).
      * Uses `Cow<'static, str>` keys so static string keys avoid allocation.
      */
-    val additional: Map<String, String> = emptyMap()
+    val additional: Map<String, Any> = emptyMap()
 )

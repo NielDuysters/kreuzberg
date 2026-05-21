@@ -50,7 +50,7 @@ data class HtmlOutputConfig(
      * Default: `"kb-"`. Change this if your host application already uses
      * classes that start with `kb-`.
      */
-    val classPrefix: String,
+    val classPrefix: String = "",
     /**
      * When `true` (default), write the resolved CSS into a `<style>` block
      * immediately after the opening `<div class="{prefix}doc">`.

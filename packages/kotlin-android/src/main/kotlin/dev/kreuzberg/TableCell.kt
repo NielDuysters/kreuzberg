@@ -28,11 +28,11 @@ package dev.kreuzberg
  */
 data class TableCell(
     /** Cell content as text */
-    val content: String,
+    val content: String = "",
     /** Row span (number of rows this cell spans) */
-    val rowSpan: Int,
+    val rowSpan: Int = 0,
     /** Column span (number of columns this cell spans) */
-    val colSpan: Int,
+    val colSpan: Int = 0,
     /** Whether this is a header cell */
-    val isHeader: Boolean
+    val isHeader: Boolean = false
 )

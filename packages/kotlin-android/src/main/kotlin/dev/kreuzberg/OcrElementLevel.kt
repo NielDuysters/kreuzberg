@@ -40,4 +40,24 @@ enum class OcrElementLevel {
     /** Page-level element */
     @com.fasterxml.jackson.annotation.JsonProperty("page")
     PAGE;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        WORD -> "word"
+        LINE -> "line"
+        BLOCK -> "block"
+        PAGE -> "page"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): OcrElementLevel = when (value) {
+            "word" -> WORD
+            "line" -> LINE
+            "block" -> BLOCK
+            "page" -> PAGE
+            else -> throw IllegalArgumentException("Unknown OcrElementLevel value: $value")
+        }
+    }
 }

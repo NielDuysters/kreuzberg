@@ -37,4 +37,22 @@ enum class CodeContentMode {
     /** Emit function/class headings + docstrings (no code bodies). */
     @com.fasterxml.jackson.annotation.JsonProperty("structure")
     STRUCTURE;
+
+    @com.fasterxml.jackson.annotation.JsonValue
+    fun toWire(): String = when (this) {
+        CHUNKS -> "chunks"
+        RAW -> "raw"
+        STRUCTURE -> "structure"
+    }
+
+    companion object {
+        @com.fasterxml.jackson.annotation.JsonCreator
+        @JvmStatic
+        fun fromWire(value: String): CodeContentMode = when (value) {
+            "chunks" -> CHUNKS
+            "raw" -> RAW
+            "structure" -> STRUCTURE
+            else -> throw IllegalArgumentException("Unknown CodeContentMode value: $value")
+        }
+    }
 }
