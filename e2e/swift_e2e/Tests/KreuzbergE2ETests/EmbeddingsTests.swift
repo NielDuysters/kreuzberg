@@ -14,7 +14,7 @@ import RustBridge
 final class EmbeddingsTests: XCTestCase {
     func testEmbedTextsDifferentPreset() throws {
         // embed_texts: multilingual preset
-        let configObj = try RustBridge.extractionConfigFromJson("{\"model\":{\"name\":\"multilingual\",\"type\":\"preset\"}}")
+        let configObj = try extractionConfigFromJson("{\"model\":{\"name\":\"multilingual\",\"type\":\"preset\"}}")
         let result = try Kreuzberg.embedTexts(texts: ["Hello world", "Test"], config: configObj)
         // skipped: field 'embeddings' not available on result type
     }

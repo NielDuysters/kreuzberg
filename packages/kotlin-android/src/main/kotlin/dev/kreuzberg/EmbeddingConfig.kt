@@ -45,7 +45,7 @@ data class EmbeddingConfig(
      * Defaults to `~/.cache/kreuzberg/embeddings/` if not specified.
      * Allows full customization of model download location.
      */
-    val cacheDir: Path? = null,
+    val cacheDir: java.nio.file.Path? = null,
     /**
      * Hardware acceleration for the embedding ONNX model.
      *

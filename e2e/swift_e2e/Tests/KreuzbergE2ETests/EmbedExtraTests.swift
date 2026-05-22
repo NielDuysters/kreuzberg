@@ -14,7 +14,7 @@ import RustBridge
 final class EmbedExtraTests: XCTestCase {
     func testEmbedTextsBatch() throws {
         // Batch embed texts
-        let configObj = try RustBridge.extractionConfigFromJson("{\"model\":{\"name\":\"balanced\",\"type\":\"preset\"}}")
+        let configObj = try extractionConfigFromJson("{\"model\":{\"name\":\"balanced\",\"type\":\"preset\"}}")
         let result = try Kreuzberg.embedTexts(texts: ["Hello", "World"], config: configObj)
     }
 

@@ -54,7 +54,7 @@ data class TreeSitterConfig(
      *
      * When `null`, uses the default: `~/.cache/tree-sitter-language-pack/v{version}/libs/`.
      */
-    val cacheDir: Path? = null,
+    val cacheDir: java.nio.file.Path? = null,
     /** Languages to pre-download on init (e.g., `["python", "rust"]`). */
     val languages: List<String>? = null,
     /** Language groups to pre-download (e.g., `["web", "systems", "scripting"]`). */

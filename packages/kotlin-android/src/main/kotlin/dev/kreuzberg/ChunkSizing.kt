@@ -41,7 +41,7 @@ sealed class ChunkSizing {
     @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.databind.JsonSerializer.None::class)
     data class Tokenizer(
         val model: String,
-        val cacheDir: Path?
+        val cacheDir: java.nio.file.Path?
     ) : ChunkSizing()
 }
 

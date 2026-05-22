@@ -31,7 +31,7 @@ import java.nio.file.Path
  */
 data class BatchFileItem(
     /** Path to the file to extract from */
-    val path: Path,
+    val path: java.nio.file.Path,
     /** Per-file configuration overrides (None uses batch-level defaults) */
     val config: FileExtractionConfig? = null
 )

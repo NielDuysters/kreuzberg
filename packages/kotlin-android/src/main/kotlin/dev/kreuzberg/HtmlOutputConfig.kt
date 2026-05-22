@@ -41,7 +41,7 @@ data class HtmlOutputConfig(
      * Path to a CSS file loaded once at renderer construction time.
      * Concatenated before `css` when both are set.
      */
-    val cssFile: Path? = null,
+    val cssFile: java.nio.file.Path? = null,
     /** Built-in colour/typography theme. Default: `HtmlTheme.Unstyled`. */
     val theme: HtmlTheme = HtmlTheme.UNSTYLED,
     /**

@@ -14,21 +14,21 @@ import RustBridge
 final class EmbedAsyncPendingTests: XCTestCase {
     func testEmbedTextsAsyncEmptyInput() async throws {
         // embed_texts_async: empty text list
-        let configObj = try RustBridge.extractionConfigFromJson("{}")
+        let configObj = try extractionConfigFromJson("{}")
         let result = try await Kreuzberg.embedTextsAsync(texts: [], config: configObj)
         // skipped: field 'embeddings' not available on result type
     }
 
     func testEmbedTextsAsyncHappy() async throws {
         // embed_texts_async: basic async embedding
-        let configObj = try RustBridge.extractionConfigFromJson("{}")
+        let configObj = try extractionConfigFromJson("{}")
         let result = try await Kreuzberg.embedTextsAsync(texts: ["First", "Second"], config: configObj)
         // skipped: field 'embeddings' not available on result type
     }
 
     func testEmbedTextsAsyncPresetSwitch() async throws {
         // embed_texts_async: preset override
-        let configObj = try RustBridge.extractionConfigFromJson("{\"model\":{\"name\":\"balanced\",\"type\":\"preset\"}}")
+        let configObj = try extractionConfigFromJson("{\"model\":{\"name\":\"balanced\",\"type\":\"preset\"}}")
         let result = try await Kreuzberg.embedTextsAsync(texts: ["Text"], config: configObj)
     }
 

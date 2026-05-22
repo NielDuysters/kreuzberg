@@ -26,11 +26,11 @@ import java.nio.file.Path
 /** Combined paths to all models needed for OCR (backward compatibility). */
 data class ModelPaths(
     /** Path to the detection model directory. */
-    val detModel: Path,
+    val detModel: java.nio.file.Path,
     /** Path to the classification model directory. */
-    val clsModel: Path,
+    val clsModel: java.nio.file.Path,
     /** Path to the recognition model directory. */
-    val recModel: Path,
+    val recModel: java.nio.file.Path,
     /** Path to the character dictionary file. */
-    val dictFile: Path
+    val dictFile: java.nio.file.Path
 )
