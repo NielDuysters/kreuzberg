@@ -34,7 +34,7 @@ data class KeywordConfig(
      * Keywords with scores below this threshold are filtered out.
      * Note: Score ranges differ between algorithms.
      */
-    val minScore: Float = 0f,
+    val minScore: Float = 0.0f,
     /**
      * N-gram range for keyword extraction (min, max).
      *

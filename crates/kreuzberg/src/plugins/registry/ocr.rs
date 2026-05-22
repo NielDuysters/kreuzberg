@@ -359,7 +359,10 @@ mod tests {
         let mut expected = seeded;
         restored.sort();
         expected.sort();
-        assert_eq!(restored, expected, "register_defaults should restore the same built-in backends");
+        assert_eq!(
+            restored, expected,
+            "register_defaults should restore the same built-in backends"
+        );
     }
 
     #[test]

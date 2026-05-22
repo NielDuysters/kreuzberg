@@ -1405,7 +1405,11 @@ mod tests {
             !overlap_detected.load(Ordering::SeqCst),
             "download lock must serialize concurrent acquirers — critical sections overlapped"
         );
-        assert_eq!(inside.load(Ordering::SeqCst), 0, "all critical sections must have exited");
+        assert_eq!(
+            inside.load(Ordering::SeqCst),
+            0,
+            "all critical sections must have exited"
+        );
     }
 
     /// The lock is released when the guard is dropped, so a subsequent acquirer
