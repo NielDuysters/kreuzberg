@@ -10365,13 +10365,13 @@ pub enum OcrBackendType {
     Custom,
 }
 
-impl From<kreuzberg::plugins::OcrBackendType> for OcrBackendType {
-    fn from(val: kreuzberg::plugins::OcrBackendType) -> Self {
+impl From<kreuzberg::OcrBackendType> for OcrBackendType {
+    fn from(val: kreuzberg::OcrBackendType) -> Self {
         match val {
-            kreuzberg::plugins::OcrBackendType::Tesseract => Self::Tesseract,
-            kreuzberg::plugins::OcrBackendType::EasyOCR => Self::EasyOCR,
-            kreuzberg::plugins::OcrBackendType::PaddleOCR => Self::PaddleOCR,
-            kreuzberg::plugins::OcrBackendType::Custom => Self::Custom,
+            kreuzberg::OcrBackendType::Tesseract => Self::Tesseract,
+            kreuzberg::OcrBackendType::EasyOCR => Self::EasyOCR,
+            kreuzberg::OcrBackendType::PaddleOCR => Self::PaddleOCR,
+            kreuzberg::OcrBackendType::Custom => Self::Custom,
         }
     }
 }
@@ -10393,12 +10393,12 @@ pub enum ProcessingStage {
     Late,
 }
 
-impl From<kreuzberg::plugins::ProcessingStage> for ProcessingStage {
-    fn from(val: kreuzberg::plugins::ProcessingStage) -> Self {
+impl From<kreuzberg::ProcessingStage> for ProcessingStage {
+    fn from(val: kreuzberg::ProcessingStage) -> Self {
         match val {
-            kreuzberg::plugins::ProcessingStage::Early => Self::Early,
-            kreuzberg::plugins::ProcessingStage::Middle => Self::Middle,
-            kreuzberg::plugins::ProcessingStage::Late => Self::Late,
+            kreuzberg::ProcessingStage::Early => Self::Early,
+            kreuzberg::ProcessingStage::Middle => Self::Middle,
+            kreuzberg::ProcessingStage::Late => Self::Late,
         }
     }
 }
@@ -11712,7 +11712,7 @@ pub fn list_embedding_presets() -> Vec<String> {
         .collect::<Vec<_>>()
 }
 
-pub struct OcrBackendBox(pub Box<dyn kreuzberg::plugins::OcrBackend + Send + Sync>);
+pub struct OcrBackendBox(pub Box<dyn kreuzberg::OcrBackend + Send + Sync>);
 #[doc(hidden)]
 pub fn alef_phantom_vec_ocr_backend() -> Vec<OcrBackendBox> {
     Vec::new()
@@ -11738,7 +11738,7 @@ pub fn ocr_backend_call_backend_type(this: &OcrBackendBox) -> OcrBackendType {
     OcrBackendType::from(this.0.backend_type())
 }
 
-pub struct PostProcessorBox(pub Box<dyn kreuzberg::plugins::PostProcessor + Send + Sync>);
+pub struct PostProcessorBox(pub Box<dyn kreuzberg::PostProcessor + Send + Sync>);
 #[doc(hidden)]
 pub fn alef_phantom_vec_post_processor() -> Vec<PostProcessorBox> {
     Vec::new()
@@ -11762,7 +11762,7 @@ pub fn post_processor_call_processing_stage(this: &PostProcessorBox) -> Processi
     ProcessingStage::from(this.0.processing_stage())
 }
 
-pub struct ValidatorBox(pub Box<dyn kreuzberg::plugins::Validator + Send + Sync>);
+pub struct ValidatorBox(pub Box<dyn kreuzberg::Validator + Send + Sync>);
 #[doc(hidden)]
 pub fn alef_phantom_vec_validator() -> Vec<ValidatorBox> {
     Vec::new()
@@ -11779,7 +11779,7 @@ pub fn validator_call_validate(this: &ValidatorBox, result: ExtractionResult, co
     })
 }
 
-pub struct EmbeddingBackendBox(pub Box<dyn kreuzberg::plugins::EmbeddingBackend + Send + Sync>);
+pub struct EmbeddingBackendBox(pub Box<dyn kreuzberg::EmbeddingBackend + Send + Sync>);
 #[doc(hidden)]
 pub fn alef_phantom_vec_embedding_backend() -> Vec<EmbeddingBackendBox> {
     Vec::new()
@@ -11802,7 +11802,7 @@ pub fn embedding_backend_call_embed(this: &EmbeddingBackendBox, texts: Vec<Strin
     })
 }
 
-pub struct DocumentExtractorBox(pub Box<dyn kreuzberg::plugins::DocumentExtractor + Send + Sync>);
+pub struct DocumentExtractorBox(pub Box<dyn kreuzberg::DocumentExtractor + Send + Sync>);
 #[doc(hidden)]
 pub fn alef_phantom_vec_document_extractor() -> Vec<DocumentExtractorBox> {
     Vec::new()
@@ -11830,7 +11830,7 @@ pub fn document_extractor_call_supported_mime_types(this: &DocumentExtractorBox)
     this.0.supported_mime_types().iter().map(|s| s.to_string()).collect()
 }
 
-pub struct RendererBox(pub Box<dyn kreuzberg::plugins::Renderer + Send + Sync>);
+pub struct RendererBox(pub Box<dyn kreuzberg::Renderer + Send + Sync>);
 #[doc(hidden)]
 pub fn alef_phantom_vec_renderer() -> Vec<RendererBox> {
     Vec::new()
@@ -11924,7 +11924,7 @@ impl kreuzberg::plugins::Plugin for SwiftOcrBackendWrapper {
     }
 }
 #[async_trait::async_trait]
-impl kreuzberg::plugins::OcrBackend for SwiftOcrBackendWrapper {
+impl kreuzberg::OcrBackend for SwiftOcrBackendWrapper {
     async fn process_image(
         &self,
         image_bytes: &[u8],
@@ -11941,9 +11941,9 @@ impl kreuzberg::plugins::OcrBackend for SwiftOcrBackendWrapper {
         self.inner.alef_supports_language(lang)
     }
 
-    fn backend_type(&self) -> kreuzberg::plugins::OcrBackendType {
+    fn backend_type(&self) -> kreuzberg::OcrBackendType {
         let json = self.inner.alef_backend_type();
-        ::serde_json::from_str::<kreuzberg::plugins::OcrBackendType>(&json)
+        ::serde_json::from_str::<kreuzberg::OcrBackendType>(&json)
             .expect("swift ocr_backend.backend_type returned invalid JSON")
     }
 }
@@ -11953,7 +11953,7 @@ impl kreuzberg::plugins::OcrBackend for SwiftOcrBackendWrapper {
 /// Wraps the Swift handle in `Arc<SwiftXxxWrapper>` and inserts it into the host registry.
 /// Errors from the registry are stringified for swift-bridge transport.
 pub fn register_ocr_backend(swift_box: ffi::SwiftOcrBackendBox) -> Result<(), String> {
-    let arc: ::std::sync::Arc<dyn kreuzberg::plugins::OcrBackend> =
+    let arc: ::std::sync::Arc<dyn kreuzberg::OcrBackend> =
         ::std::sync::Arc::new(SwiftOcrBackendWrapper::new(swift_box));
     let registry = kreuzberg::plugins::registry::get_ocr_backend_registry();
     let mut guard = registry.write();
@@ -12015,7 +12015,7 @@ impl kreuzberg::plugins::Plugin for SwiftPostProcessorWrapper {
     }
 }
 #[async_trait::async_trait]
-impl kreuzberg::plugins::PostProcessor for SwiftPostProcessorWrapper {
+impl kreuzberg::PostProcessor for SwiftPostProcessorWrapper {
     async fn process(
         &self,
         result: &mut kreuzberg::ExtractionResult,
@@ -12027,9 +12027,9 @@ impl kreuzberg::plugins::PostProcessor for SwiftPostProcessorWrapper {
         decode_inbound_envelope::<()>(&envelope).map(|_| ())
     }
 
-    fn processing_stage(&self) -> kreuzberg::plugins::ProcessingStage {
+    fn processing_stage(&self) -> kreuzberg::ProcessingStage {
         let json = self.inner.alef_processing_stage();
-        ::serde_json::from_str::<kreuzberg::plugins::ProcessingStage>(&json)
+        ::serde_json::from_str::<kreuzberg::ProcessingStage>(&json)
             .expect("swift post_processor.processing_stage returned invalid JSON")
     }
 }
@@ -12039,7 +12039,7 @@ impl kreuzberg::plugins::PostProcessor for SwiftPostProcessorWrapper {
 /// Wraps the Swift handle in `Arc<SwiftXxxWrapper>` and inserts it into the host registry.
 /// Errors from the registry are stringified for swift-bridge transport.
 pub fn register_post_processor(swift_box: ffi::SwiftPostProcessorBox) -> Result<(), String> {
-    let arc: ::std::sync::Arc<dyn kreuzberg::plugins::PostProcessor> =
+    let arc: ::std::sync::Arc<dyn kreuzberg::PostProcessor> =
         ::std::sync::Arc::new(SwiftPostProcessorWrapper::new(swift_box));
     let registry = kreuzberg::plugins::registry::get_post_processor_registry();
     let mut guard = registry.write();
@@ -12101,7 +12101,7 @@ impl kreuzberg::plugins::Plugin for SwiftValidatorWrapper {
     }
 }
 #[async_trait::async_trait]
-impl kreuzberg::plugins::Validator for SwiftValidatorWrapper {
+impl kreuzberg::Validator for SwiftValidatorWrapper {
     async fn validate(
         &self,
         result: &kreuzberg::ExtractionResult,
@@ -12119,8 +12119,7 @@ impl kreuzberg::plugins::Validator for SwiftValidatorWrapper {
 /// Wraps the Swift handle in `Arc<SwiftXxxWrapper>` and inserts it into the host registry.
 /// Errors from the registry are stringified for swift-bridge transport.
 pub fn register_validator(swift_box: ffi::SwiftValidatorBox) -> Result<(), String> {
-    let arc: ::std::sync::Arc<dyn kreuzberg::plugins::Validator> =
-        ::std::sync::Arc::new(SwiftValidatorWrapper::new(swift_box));
+    let arc: ::std::sync::Arc<dyn kreuzberg::Validator> = ::std::sync::Arc::new(SwiftValidatorWrapper::new(swift_box));
     let registry = kreuzberg::plugins::registry::get_validator_registry();
     let mut guard = registry.write();
     guard.register(arc).map_err(|e| e.to_string())
@@ -12181,7 +12180,7 @@ impl kreuzberg::plugins::Plugin for SwiftEmbeddingBackendWrapper {
     }
 }
 #[async_trait::async_trait]
-impl kreuzberg::plugins::EmbeddingBackend for SwiftEmbeddingBackendWrapper {
+impl kreuzberg::EmbeddingBackend for SwiftEmbeddingBackendWrapper {
     fn dimensions(&self) -> usize {
         self.inner.alef_dimensions()
     }
@@ -12197,7 +12196,7 @@ impl kreuzberg::plugins::EmbeddingBackend for SwiftEmbeddingBackendWrapper {
 /// Wraps the Swift handle in `Arc<SwiftXxxWrapper>` and inserts it into the host registry.
 /// Errors from the registry are stringified for swift-bridge transport.
 pub fn register_embedding_backend(swift_box: ffi::SwiftEmbeddingBackendBox) -> Result<(), String> {
-    let arc: ::std::sync::Arc<dyn kreuzberg::plugins::EmbeddingBackend> =
+    let arc: ::std::sync::Arc<dyn kreuzberg::EmbeddingBackend> =
         ::std::sync::Arc::new(SwiftEmbeddingBackendWrapper::new(swift_box));
     let registry = kreuzberg::plugins::registry::get_embedding_backend_registry();
     let mut guard = registry.write();
@@ -12259,7 +12258,7 @@ impl kreuzberg::plugins::Plugin for SwiftDocumentExtractorWrapper {
     }
 }
 #[async_trait::async_trait]
-impl kreuzberg::plugins::DocumentExtractor for SwiftDocumentExtractorWrapper {
+impl kreuzberg::DocumentExtractor for SwiftDocumentExtractorWrapper {
     async fn extract_bytes(
         &self,
         content: &[u8],
@@ -12288,7 +12287,7 @@ impl kreuzberg::plugins::DocumentExtractor for SwiftDocumentExtractorWrapper {
 /// Wraps the Swift handle in `Arc<SwiftXxxWrapper>` and inserts it into the host registry.
 /// Errors from the registry are stringified for swift-bridge transport.
 pub fn register_document_extractor(swift_box: ffi::SwiftDocumentExtractorBox) -> Result<(), String> {
-    let arc: ::std::sync::Arc<dyn kreuzberg::plugins::DocumentExtractor> =
+    let arc: ::std::sync::Arc<dyn kreuzberg::DocumentExtractor> =
         ::std::sync::Arc::new(SwiftDocumentExtractorWrapper::new(swift_box));
     let registry = kreuzberg::plugins::registry::get_document_extractor_registry();
     let mut guard = registry.write();
@@ -12349,7 +12348,7 @@ impl kreuzberg::plugins::Plugin for SwiftRendererWrapper {
         decode_inbound_envelope::<()>(&self.inner.alef_shutdown()).map(|_| ())
     }
 }
-impl kreuzberg::plugins::Renderer for SwiftRendererWrapper {
+impl kreuzberg::Renderer for SwiftRendererWrapper {
     fn render(&self, doc: &kreuzberg::InternalDocument) -> std::result::Result<String, kreuzberg::KreuzbergError> {
         let doc = ::serde_json::to_string(&doc).expect("serializable param doc");
         let envelope = self.inner.alef_render(doc);
@@ -12362,8 +12361,7 @@ impl kreuzberg::plugins::Renderer for SwiftRendererWrapper {
 /// Wraps the Swift handle in `Arc<SwiftXxxWrapper>` and inserts it into the host registry.
 /// Errors from the registry are stringified for swift-bridge transport.
 pub fn register_renderer(swift_box: ffi::SwiftRendererBox) -> Result<(), String> {
-    let arc: ::std::sync::Arc<dyn kreuzberg::plugins::Renderer> =
-        ::std::sync::Arc::new(SwiftRendererWrapper::new(swift_box));
+    let arc: ::std::sync::Arc<dyn kreuzberg::Renderer> = ::std::sync::Arc::new(SwiftRendererWrapper::new(swift_box));
     let registry = kreuzberg::plugins::registry::get_renderer_registry();
     let mut guard = registry.write();
     guard.register(arc).map_err(|e| e.to_string())
@@ -13073,12 +13071,12 @@ pub fn code_content_mode_from_json(json: String) -> Result<CodeContentMode, Stri
         .map_err(|e| e.to_string())
 }
 pub fn ocr_backend_type_from_json(json: String) -> Result<OcrBackendType, String> {
-    serde_json::from_str::<kreuzberg::plugins::OcrBackendType>(&json)
+    serde_json::from_str::<kreuzberg::OcrBackendType>(&json)
         .map(OcrBackendType::from)
         .map_err(|e| e.to_string())
 }
 pub fn processing_stage_from_json(json: String) -> Result<ProcessingStage, String> {
-    serde_json::from_str::<kreuzberg::plugins::ProcessingStage>(&json)
+    serde_json::from_str::<kreuzberg::ProcessingStage>(&json)
         .map(ProcessingStage::from)
         .map_err(|e| e.to_string())
 }

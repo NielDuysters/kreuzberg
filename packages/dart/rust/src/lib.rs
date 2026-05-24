@@ -5964,23 +5964,23 @@ impl From<kreuzberg::extraction::docx::math::FracType> for FracType {
     }
 }
 
-impl From<kreuzberg::plugins::OcrBackendType> for OcrBackendType {
-    fn from(v: kreuzberg::plugins::OcrBackendType) -> Self {
+impl From<kreuzberg::OcrBackendType> for OcrBackendType {
+    fn from(v: kreuzberg::OcrBackendType) -> Self {
         match v {
-            kreuzberg::plugins::OcrBackendType::Tesseract => OcrBackendType::Tesseract,
-            kreuzberg::plugins::OcrBackendType::EasyOCR => OcrBackendType::EasyOCR,
-            kreuzberg::plugins::OcrBackendType::PaddleOCR => OcrBackendType::PaddleOCR,
-            kreuzberg::plugins::OcrBackendType::Custom => OcrBackendType::Custom,
+            kreuzberg::OcrBackendType::Tesseract => OcrBackendType::Tesseract,
+            kreuzberg::OcrBackendType::EasyOCR => OcrBackendType::EasyOCR,
+            kreuzberg::OcrBackendType::PaddleOCR => OcrBackendType::PaddleOCR,
+            kreuzberg::OcrBackendType::Custom => OcrBackendType::Custom,
         }
     }
 }
 
-impl From<kreuzberg::plugins::ProcessingStage> for ProcessingStage {
-    fn from(v: kreuzberg::plugins::ProcessingStage) -> Self {
+impl From<kreuzberg::ProcessingStage> for ProcessingStage {
+    fn from(v: kreuzberg::ProcessingStage) -> Self {
         match v {
-            kreuzberg::plugins::ProcessingStage::Early => ProcessingStage::Early,
-            kreuzberg::plugins::ProcessingStage::Middle => ProcessingStage::Middle,
-            kreuzberg::plugins::ProcessingStage::Late => ProcessingStage::Late,
+            kreuzberg::ProcessingStage::Early => ProcessingStage::Early,
+            kreuzberg::ProcessingStage::Middle => ProcessingStage::Middle,
+            kreuzberg::ProcessingStage::Late => ProcessingStage::Late,
         }
     }
 }
@@ -7986,23 +7986,23 @@ impl From<CodeContentMode> for kreuzberg::CodeContentMode {
     }
 }
 
-impl From<OcrBackendType> for kreuzberg::plugins::OcrBackendType {
+impl From<OcrBackendType> for kreuzberg::OcrBackendType {
     fn from(v: OcrBackendType) -> Self {
         match v {
-            OcrBackendType::Tesseract => kreuzberg::plugins::OcrBackendType::Tesseract,
-            OcrBackendType::EasyOCR => kreuzberg::plugins::OcrBackendType::EasyOCR,
-            OcrBackendType::PaddleOCR => kreuzberg::plugins::OcrBackendType::PaddleOCR,
-            OcrBackendType::Custom => kreuzberg::plugins::OcrBackendType::Custom,
+            OcrBackendType::Tesseract => kreuzberg::OcrBackendType::Tesseract,
+            OcrBackendType::EasyOCR => kreuzberg::OcrBackendType::EasyOCR,
+            OcrBackendType::PaddleOCR => kreuzberg::OcrBackendType::PaddleOCR,
+            OcrBackendType::Custom => kreuzberg::OcrBackendType::Custom,
         }
     }
 }
 
-impl From<ProcessingStage> for kreuzberg::plugins::ProcessingStage {
+impl From<ProcessingStage> for kreuzberg::ProcessingStage {
     fn from(v: ProcessingStage) -> Self {
         match v {
-            ProcessingStage::Early => kreuzberg::plugins::ProcessingStage::Early,
-            ProcessingStage::Middle => kreuzberg::plugins::ProcessingStage::Middle,
-            ProcessingStage::Late => kreuzberg::plugins::ProcessingStage::Late,
+            ProcessingStage::Early => kreuzberg::ProcessingStage::Early,
+            ProcessingStage::Middle => kreuzberg::ProcessingStage::Middle,
+            ProcessingStage::Late => kreuzberg::ProcessingStage::Late,
         }
     }
 }
@@ -9758,7 +9758,7 @@ impl kreuzberg::plugins::Plugin for OcrBackendDartImpl {
 }
 
 #[async_trait::async_trait]
-impl kreuzberg::plugins::OcrBackend for OcrBackendDartImpl {
+impl kreuzberg::OcrBackend for OcrBackendDartImpl {
     async fn process_image(
         &self,
         image_bytes: &[u8],
@@ -9788,7 +9788,7 @@ impl kreuzberg::plugins::OcrBackend for OcrBackendDartImpl {
         __result
     }
 
-    fn backend_type(&self) -> kreuzberg::plugins::OcrBackendType {
+    fn backend_type(&self) -> kreuzberg::OcrBackendType {
         let __result = ::tokio::runtime::Builder::new_current_thread()
             .build()
             .expect("build alef visitor tokio runtime")
@@ -9930,7 +9930,7 @@ impl kreuzberg::plugins::Plugin for PostProcessorDartImpl {
 }
 
 #[async_trait::async_trait]
-impl kreuzberg::plugins::PostProcessor for PostProcessorDartImpl {
+impl kreuzberg::PostProcessor for PostProcessorDartImpl {
     async fn process(
         &self,
         result: &mut kreuzberg::ExtractionResult,
@@ -9941,7 +9941,7 @@ impl kreuzberg::plugins::PostProcessor for PostProcessorDartImpl {
         Ok((self.process)(result, config).await)
     }
 
-    fn processing_stage(&self) -> kreuzberg::plugins::ProcessingStage {
+    fn processing_stage(&self) -> kreuzberg::ProcessingStage {
         let __result = ::tokio::runtime::Builder::new_current_thread()
             .build()
             .expect("build alef visitor tokio runtime")
@@ -10066,7 +10066,7 @@ impl kreuzberg::plugins::Plugin for ValidatorDartImpl {
 }
 
 #[async_trait::async_trait]
-impl kreuzberg::plugins::Validator for ValidatorDartImpl {
+impl kreuzberg::Validator for ValidatorDartImpl {
     async fn validate(
         &self,
         result: &kreuzberg::ExtractionResult,
@@ -10179,7 +10179,7 @@ impl kreuzberg::plugins::Plugin for EmbeddingBackendDartImpl {
 }
 
 #[async_trait::async_trait]
-impl kreuzberg::plugins::EmbeddingBackend for EmbeddingBackendDartImpl {
+impl kreuzberg::EmbeddingBackend for EmbeddingBackendDartImpl {
     fn dimensions(&self) -> usize {
         let __result = ::tokio::runtime::Builder::new_current_thread()
             .build()
@@ -10287,7 +10287,7 @@ impl kreuzberg::plugins::Plugin for DocumentExtractorDartImpl {
 }
 
 #[async_trait::async_trait]
-impl kreuzberg::plugins::DocumentExtractor for DocumentExtractorDartImpl {
+impl kreuzberg::DocumentExtractor for DocumentExtractorDartImpl {
     async fn extract_bytes(
         &self,
         content: &[u8],
@@ -10434,7 +10434,7 @@ impl kreuzberg::plugins::Plugin for RendererDartImpl {
     }
 }
 
-impl kreuzberg::plugins::Renderer for RendererDartImpl {
+impl kreuzberg::Renderer for RendererDartImpl {
     fn render(&self, doc: &kreuzberg::InternalDocument) -> kreuzberg::Result<String> {
         let doc = doc.clone();
         let __result = ::tokio::runtime::Builder::new_current_thread()
