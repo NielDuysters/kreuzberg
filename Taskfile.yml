@@ -242,7 +242,8 @@ tasks:
       - task: kotlin_android:upgrade
       - task: r:upgrade
       - task: zig:upgrade
-      - alef update --latest
+      - cmd: alef update --latest
+        ignore_error: true
       - prek autoupdate
       - gau --update .
 
