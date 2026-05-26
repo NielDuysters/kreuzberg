@@ -673,7 +673,7 @@ mod build_tesseract {
                     .define("USE_OPENCL", "OFF")
                     .define("OPENMP_BUILD", "ON")
                     .define("BUILD_TESTS", "OFF")
-                    .define("ENABLE_LTO", "OFF")
+                    .define("ENABLE_LTO", "ON")
                     .define("BUILD_PROG", "OFF")
                     .define("BUILD_TESSERACT_BINARY", "OFF")
                     .define("SW_BUILD", "OFF")
