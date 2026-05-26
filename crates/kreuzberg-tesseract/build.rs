@@ -671,7 +671,7 @@ mod build_tesseract {
                     .define("GRAPHICS_DISABLED", "ON")
                     .define("DISABLED_LEGACY_ENGINE", "OFF")
                     .define("USE_OPENCL", "OFF")
-                    .define("OPENMP_BUILD", "OFF")
+                    .define("OPENMP_BUILD", "ON")
                     .define("BUILD_TESTS", "OFF")
                     .define("ENABLE_LTO", "OFF")
                     .define("BUILD_PROG", "OFF")
